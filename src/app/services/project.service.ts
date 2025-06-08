@@ -43,58 +43,58 @@ export class ProjectService {
         },
       ],
     },
-    // {
-    //   id: 2,
-    //   title: 'Proyecto "Zenva Runner"',
-    //   description:
-    //     'Videojuego de plataformas 2D para móviles, creado con el motor Godot y exportado a Android.',
-    //   coverImage: '/assets/images/project2-cover.png',
-    //   screenshots: [
-    //     {
-    //       src: '/assets/images/project2-ss1.png',
-    //       caption: 'Pantalla de inicio.',
-    //       thumb: '/assets/images/project2-ss1.png',
-    //     },
-    //     {
-    //       src: '/assets/images/project2-ss2.png',
-    //       caption: 'Gameplay del nivel 1.',
-    //       thumb: '/assets/images/project2-ss2.png',
-    //     },
-    //   ],
-    // },
-    // {
-    //   id: 3,
-    //   title: 'Proyecto "Weather Now"',
-    //   description:
-    //     'Aplicación del clima en tiempo real utilizando React y una API externa para obtener los datos meteorológicos.',
-    //   coverImage: '/assets/images/project3-cover.png',
-    //   screenshots: [
-    //     {
-    //       src: '/assets/images/project3-ss1.png',
-    //       caption: 'Vista principal del clima.',
-    //       thumb: '/assets/images/project3-ss1.png',
-    //     },
-    //   ],
-    // },
-    // {
-    //   id: 4,
-    //   title: 'Mi Portafolio Personal',
-    //   description:
-    //     'Este mismo portafolio, diseñado para ser rápido, responsivo y mostrar mis habilidades con Angular.',
-    //   coverImage: '/assets/images/project4-cover.png',
-    //   screenshots: [
-    //     {
-    //       src: '/assets/images/project4-ss1.png',
-    //       caption: 'Vista en modo oscuro.',
-    //       thumb: '/assets/images/project4-ss1.png',
-    //     },
-    //     {
-    //       src: '/assets/images/project4-ss2.png',
-    //       caption: 'Vista en modo claro.',
-    //       thumb: '/assets/images/project4-ss2.png',
-    //     },
-    //   ],
-    // },
+    {
+      id: 2,
+      title: 'Proyecto "Zenva Runner"',
+      description:
+        'Videojuego de plataformas 2D para móviles, creado con el motor Godot y exportado a Android.',
+      coverImage: '/assets/images/project2-cover.png',
+      screenshots: [
+        {
+          src: '/assets/images/project2-ss1.png',
+          caption: 'Pantalla de inicio.',
+          thumb: '/assets/images/project2-ss1.png',
+        },
+        {
+          src: '/assets/images/project2-ss2.png',
+          caption: 'Gameplay del nivel 1.',
+          thumb: '/assets/images/project2-ss2.png',
+        },
+      ],
+    },
+    {
+      id: 3,
+      title: 'Proyecto "Weather Now"',
+      description:
+        'Aplicación del clima en tiempo real utilizando React y una API externa para obtener los datos meteorológicos.',
+      coverImage: '/assets/images/project3-cover.png',
+      screenshots: [
+        {
+          src: '/assets/images/project3-ss1.png',
+          caption: 'Vista principal del clima.',
+          thumb: '/assets/images/project3-ss1.png',
+        },
+      ],
+    },
+    {
+      id: 4,
+      title: 'Mi Portafolio Personal',
+      description:
+        'Este mismo portafolio, diseñado para ser rápido, responsivo y mostrar mis habilidades con Angular.',
+      coverImage: '/assets/images/project4-cover.png',
+      screenshots: [
+        {
+          src: '/assets/images/project4-ss1.png',
+          caption: 'Vista en modo oscuro.',
+          thumb: '/assets/images/project4-ss1.png',
+        },
+        {
+          src: '/assets/images/project4-ss2.png',
+          caption: 'Vista en modo claro.',
+          thumb: '/assets/images/project4-ss2.png',
+        },
+      ],
+    },
   ];
 
   constructor() {}
