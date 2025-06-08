@@ -11,6 +11,12 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border: 1px solid var(--borde-color, #e0e0e0);
 
+  // --- INICIO DE LA MODIFICACIÓN ---
+  height: 100%; // Ocupa todo el alto de la celda del grid
+  display: flex; // Se convierte en un contenedor flex
+  flex-direction: column; // Apila sus hijos verticalmente
+  // --- FIN DE LA MODIFICACIÓN ---
+
   &:hover {
     transform: translateY(-10px);
     box-shadow: 0 10px 25px var(--sombra-color, rgba(0, 0, 0, 0.2));
@@ -21,6 +27,9 @@
   width: 100%;
   height: 200px;
   overflow: hidden;
+  // --- INICIO DE LA MODIFICACIÓN ---
+  flex-shrink: 0; // Evita que la imagen se encoja si el texto es muy largo
+  // --- FIN DE LA MODIFICACIÓN ---
 }
 
 .card-image {
@@ -31,6 +40,11 @@
 
 .card-content {
   padding: 1.5rem;
+  // --- INICIO DE LA MODIFICACIÓN ---
+  flex-grow: 1; // Permite que esta sección crezca para ocupar el espacio vertical sobrante
+  display: flex;
+  flex-direction: column;
+  // --- FIN DE LA MODIFICACIÓN ---
 }
 
 .card-title {

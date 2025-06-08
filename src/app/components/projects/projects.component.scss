@@ -11,9 +11,25 @@
   font-weight: 300;
 }
 
+/* --- INICIO DE LA MODIFICACIÓN --- */
+
 .projects-grid {
   display: grid;
-  // Hacemos que el grid sea responsive
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 2rem;
+
+  /* Estilos por defecto (Mobile First): 1 columna */
+  /* Esto soluciona el problema de que las tarjetas se corten en el móvil */
+  grid-template-columns: 1fr;
 }
+
+/* Media Query para pantallas más grandes (Tablets y Escritorio) */
+/* Usamos 992px como punto de quiebre para asegurar que haya espacio suficiente */
+@media (min-width: 992px) {
+  .projects-grid {
+    /* En pantallas grandes, forzamos un grid de 2 columnas iguales */
+    /* Esto soluciona el problema de que no se viera 2x2 */
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* --- FIN DE LA MODIFICACIÓN --- */
