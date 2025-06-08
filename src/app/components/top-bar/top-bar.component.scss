@@ -7,3 +7,20 @@
   color: white;
   font-weight: bold;
 }
+
+.menu-toggle {
+  font-size: 24px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: none; /* oculto por defecto */
+  margin-right: 1rem;
+}
+
+/* Mostrar botón solo en móviles */
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: inline-block;
+  }
+}

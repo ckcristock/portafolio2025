@@ -1,3 +1,8 @@
 <div class="topbar-content">
+  <button class="menu-toggle" (click)="toggleSidebar()">☰</button>
   <span>Topbar - Aquí puede ir el menú o nombre del proyecto</span>
+  <!-- Opcional: botón para toggle tema -->
+  <button (click)="toggleTheme()" style="margin-left: auto">
+    {{ isDarkMode ? "Light Mode" : "Dark Mode" }}
+  </button>
 </div>

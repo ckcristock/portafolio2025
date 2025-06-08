@@ -7,8 +7,14 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
   selector: 'app-root',
   imports: [RouterOutlet, TopBarComponent, SidebarComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
   title = 'angular';
+
+  sidebarActive = false;
+
+  onToggleSidebar() {
+    this.sidebarActive = !this.sidebarActive;
+  }
 }
