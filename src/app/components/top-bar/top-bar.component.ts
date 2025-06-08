@@ -1,52 +1,52 @@
 import {
   Component,
   OnInit,
-  HostBinding,
   Output,
   EventEmitter,
+  OnDestroy,
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
+import { ThemeService } from '../../services/theme.service'; // IMPORTANTE
 
 @Component({
   selector: 'app-top-bar',
   standalone: true,
-  imports: [],
+  imports: [CommonModule], // Necesario para *ngIf
   templateUrl: './top-bar.component.html',
-  styleUrls: ['./top-bar.component.scss'], // corregí typo styleUrl -> styleUrls
+  styleUrls: ['./top-bar.component.scss'],
 })
-export class TopBarComponent implements OnInit {
-  isDarkMode = true;
+export class TopBarComponent implements OnInit, OnDestroy {
+  isDarkMode: boolean = true;
+  private themeSubscription!: Subscription;
 
-  @HostBinding('class.light-mode') get isLight() {
-    return !this.isDarkMode;
-  }
-
-  // Nuevo Output para emitir evento toggle sidebar
   @Output() toggleSidebarEvent = new EventEmitter<void>();
 
+  // Inyectamos el servicio
+  constructor(private themeService: ThemeService) {}
+
   ngOnInit(): void {
-    const storedTheme = localStorage.getItem('theme');
-    if (storedTheme === 'light') {
-      this.isDarkMode = false;
-    } else {
-      localStorage.setItem('theme', 'dark');
-    }
-    this.applyTheme();
+    // Nos suscribimos para saber el estado actual del tema
+    this.themeSubscription = this.themeService.isDark$.subscribe((isDark) => {
+      this.isDarkMode = isDark;
+    });
   }
 
+  ngOnDestroy(): void {
+    // Buena práctica para evitar fugas de memoria
+    this.themeSubscription.unsubscribe();
+  }
+
+  /**
+   * Llama al servicio para cambiar el tema
+   */
   toggleTheme() {
-    this.isDarkMode = !this.isDarkMode;
-    localStorage.setItem('theme', this.isDarkMode ? 'dark' : 'light');
-    this.applyTheme();
+    this.themeService.toggleTheme();
   }
 
-  applyTheme() {
-    const body = document.querySelector('body');
-    if (body) {
-      body.classList.toggle('light-mode', !this.isDarkMode);
-    }
-  }
-
-  // Nuevo método para emitir evento toggle sidebar
+  /**
+   * Emite el evento para mostrar/ocultar el sidebar en móviles
+   */
   toggleSidebar() {
     this.toggleSidebarEvent.emit();
   }

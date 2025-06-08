@@ -3,19 +3,31 @@
   display: flex;
   align-items: center;
   padding: 0 1rem;
-  background-color: #2e2e2e;
-  color: white;
+  background-color: var(--topbar-bg);
+  color: var(--texto-primario);
   font-weight: bold;
+  border-bottom: 1px solid var(--borde-color);
+  transition: background-color 0.3s ease, color 0.3s ease,
+    border-bottom 0.3s ease;
 }
 
-.menu-toggle {
+.menu-toggle,
+.theme-toggle {
   font-size: 24px;
   background: none;
   border: none;
-  color: white;
+  color: var(--texto-primario);
   cursor: pointer;
-  display: none; /* oculto por defecto */
   margin-right: 1rem;
+}
+
+.theme-toggle {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.menu-toggle {
+  display: none; /* oculto por defecto */
 }
 
 /* Mostrar botón solo en móviles */

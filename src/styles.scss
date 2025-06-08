@@ -9,5 +9,34 @@ html,
 body {
   height: 100%;
   width: 100%;
-  overflow: hidden; /* Opcional si quieres quitar cualquier scroll */
+  overflow: hidden;
+  font-family: sans-serif;
+  /* Transición suave para el cambio de colores */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ========================================= */
+/* VARIABLES DE TEMA                       */
+/* ========================================= */
+
+/* Por defecto, usamos las variables del tema oscuro */
+:root {
+  --sidebar-bg: #1f1f1f;
+  --topbar-bg: #2e2e2e;
+  --contenido-bg: #181818;
+  --texto-primario: #ffffff;
+  --texto-secundario: #a0a0a0;
+  --color-acento: #00ffff; /* Aqua */
+  --borde-color: #333;
+}
+
+/* Cuando el body tenga la clase 'light-mode', se usarán estas variables */
+body.light-mode {
+  --sidebar-bg: #f0f2f5;
+  --topbar-bg: #ffffff;
+  --contenido-bg: #f4f4f4;
+  --texto-primario: #121212;
+  --texto-secundario: #5a5a5a;
+  --color-acento: #007bff; /* Un azul para el modo claro */
+  --borde-color: #e0e0e0;
 }
