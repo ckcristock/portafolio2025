@@ -1,0 +1,11 @@
+<div class="projects-container">
+  <h2>Mis Proyectos</h2>
+  <div class="projects-grid">
+    <app-project-card
+      *ngFor="let project of projects; let i = index"
+      [project]="project"
+      (cardClick)="open(i)"
+    >
+    </app-project-card>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+<div class="card" (click)="onCardClick()">
+  <div class="card-image-container">
+    <img [src]="project.coverImage" [alt]="project.title" class="card-image" />
+  </div>
+  <div class="card-content">
+    <h3 class="card-title">{{ project.title }}</h3>
+    <p class="card-description">{{ project.description }}</p>
+  </div>
+</div>

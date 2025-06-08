@@ -11,7 +11,6 @@ body {
   width: 100%;
   overflow: hidden;
   font-family: sans-serif;
-  /* Transición suave para el cambio de colores */
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -28,6 +27,12 @@ body {
   --texto-secundario: #a0a0a0;
   --color-acento: #00ffff; /* Aqua */
   --borde-color: #333;
+  --sombra-color: rgba(0, 0, 0, 0.4);
+
+  /* --- INICIO DE LA CORRECCIÓN --- */
+  /* Faltaba definir esta variable para el fondo de las tarjetas en modo oscuro */
+  --background-secundario: #2e2e2e;
+  /* --- FIN DE LA CORRECCIÓN --- */
 }
 
 /* Cuando el body tenga la clase 'light-mode', se usarán estas variables */
@@ -39,4 +44,6 @@ body.light-mode {
   --texto-secundario: #5a5a5a;
   --color-acento: #007bff; /* Un azul para el modo claro */
   --borde-color: #e0e0e0;
+  --sombra-color: rgba(0, 0, 0, 0.1);
+  --background-secundario: #ffffff;
 }
