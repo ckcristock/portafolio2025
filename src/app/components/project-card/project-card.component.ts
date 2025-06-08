@@ -16,6 +16,9 @@ export class ProjectCardComponent {
   @Output() cardClick = new EventEmitter<void>();
 
   onCardClick(): void {
+    console.log(
+      'PASO 1: Clic detectado en la tarjeta HIJA. Emitiendo evento...'
+    );
     this.cardClick.emit();
   }
 }
