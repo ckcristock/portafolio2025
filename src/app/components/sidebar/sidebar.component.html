@@ -1,6 +1,10 @@
-<div class="sidebar-content">
+<div class="scrollable-content">
   <div class="image-card">
-    <img src="anaconda.png" alt="Anaconda" class="anaconda-img" />
+    <img
+      src="anaconda.png"
+      alt="Anaconda verde en una rama"
+      class="anaconda-img"
+    />
   </div>
 
   <div class="poem-container">
@@ -31,4 +35,24 @@
       las que el jiujitero y el desarrollador impactan.
     </p>
   </div>
+</div>
+
+<div class="collapse-control-wrapper">
+  <button
+    (click)="onCollapse()"
+    class="collapse-arrow"
+    aria-label="Ocultar menú"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M14.77 12.79a.75.75 0 01-1.06 0L10 9.06l-3.71 3.73a.75.75 0 11-1.06-1.06l4.24-4.25a.75.75 0 011.06 0l4.24 4.25a.75.75 0 010 1.06z"
+        clip-rule="evenodd"
+      />
+    </svg>
+  </button>
 </div>

@@ -1,33 +1,57 @@
-/* Estilos base (aplican a ambos modos, principalmente para el oscuro) */
-.sidebar-content {
-  padding: 1rem;
-  text-align: left;
+/* Reemplaza todo el contenido de tu sidebar.component.scss con esto */
+
+:host {
+  display: flex;
+  flex-direction: column;
   height: 100%;
-  overflow-y: auto;
 }
 
-/* --- INICIO DE LA MODIFICACIÓN CLAVE --- */
+.scrollable-content {
+  flex: 1;
+  overflow-y: auto;
+  /* El padding inferior extra ya no se aplica aquí, sino solo en la media query de móvil */
+  padding: 1rem;
+}
 
-/* Se definen las dimensiones y espaciados para AMBOS modos para evitar el salto */
+/* --- INICIO DE LA MODIFICACIÓN --- */
+.collapse-control-wrapper {
+  /* 1. Ocultamos la flecha por defecto (en la vista de escritorio) */
+  display: none;
+  flex-shrink: 0;
+  text-align: center;
+  padding: 0.5rem 0;
+  background: transparent;
+  pointer-events: none;
+}
+/* --- FIN DE LA MODIFICACIÓN --- */
+
+.image-card,
+.poem-container,
+.anaconda-img,
+h1,
+.collapse-arrow,
+.collapse-arrow:hover,
+.collapse-arrow svg {
+  /* ...Todos los estilos de estos elementos se mantienen exactamente igual que antes... */
+}
+
+/* --- Estilos de las tarjetas y contenido (sin cambios funcionales) --- */
+
 .image-card {
   margin-bottom: 1.5rem;
   border-radius: 8px;
-  padding: 0.5rem; /* El padding AHORA ES CONSTANTE */
-  border: 1px solid transparent; /* El borde existe pero es invisible en modo oscuro */
-  background-color: transparent; /* El fondo es invisible en modo oscuro */
-  /* Transición suave para los cambios de color */
+  padding: 0.5rem;
+  border: 1px solid transparent;
+  background-color: transparent;
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .poem-container {
   border-radius: 8px;
-  padding: 1.25rem; /* El padding AHORA ES CONSTANTE */
-  border: 1px solid transparent; /* El borde existe pero es invisible */
-  background-color: transparent; /* El fondo es invisible en modo oscuro */
-  /* Transición suave para los cambios de color */
+  padding: 1.25rem;
+  border: 1px solid transparent;
+  background-color: transparent;
   transition: background-color 0.3s ease, border-color 0.3s ease;
-
-  /* Estilos de texto que no cambian entre modos */
   font-size: 14px;
   line-height: 1.6;
   color: var(--texto-secundario);
@@ -38,7 +62,6 @@
   max-width: 250px;
   display: block;
   margin: 0 auto;
-  /* El redondeo de la imagen es constante para evitar saltos */
   border-radius: 4px;
 }
 
@@ -46,23 +69,56 @@ h1 {
   font-size: 20px;
   margin-bottom: 10px;
   color: var(--color-acento);
-  /* El padding es constante para evitar movimiento del título */
   padding-left: 0.25rem;
 }
 
-/* ================================================================ */
-/* ESTILOS EXCLUSIVOS PARA EL MODO CLARO                            */
-/* Ahora solo se cambian colores y sombras, no dimensiones.         */
-/* ================================================================ */
-
 :host-context(body.light-mode) {
-  /* Se "colorean" las tarjetas que antes eran transparentes */
   .image-card,
   .poem-container {
     background-color: var(--contenido-bg);
     border-color: var(--borde-color);
-    box-shadow: 0 2px 4px var(--sombra-color); /* La sombra no afecta al layout, por lo que puede aparecer y desaparecer sin problemas */
+    box-shadow: 0 2px 4px var(--sombra-color);
   }
 }
 
+.collapse-arrow {
+  background-color: var(--contenido-bg);
+  border: 1px solid var(--borde-color);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--texto-secundario);
+  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 8px var(--sombra-color);
+  pointer-events: auto;
+}
+
+.collapse-arrow:hover {
+  background-color: var(--borde-color);
+  color: var(--texto-primario);
+  box-shadow: 0 4px 12px var(--sombra-color);
+}
+
+.collapse-arrow svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* --- INICIO DE LA MODIFICACIÓN --- */
+/* Se reintroduce la media query para mostrar los elementos solo en móvil */
+@media (max-width: 768px) {
+  .scrollable-content {
+    /* El padding inferior solo se aplica en móvil para dejar espacio a la flecha */
+    padding-bottom: 15px;
+  }
+
+  .collapse-control-wrapper {
+    /* La flecha solo se muestra en móvil */
+    display: block;
+  }
+}
 /* --- FIN DE LA MODIFICACIÓN --- */

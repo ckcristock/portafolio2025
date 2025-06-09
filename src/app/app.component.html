@@ -1,5 +1,9 @@
 <div class="layout">
-  <app-sidebar [class.active]="sidebarActive"></app-sidebar>
+  <app-sidebar
+    [class.active]="sidebarActive"
+    (collapseEvent)="onToggleSidebar()"
+  ></app-sidebar>
+
   <div class="main-content">
     <app-top-bar (toggleSidebarEvent)="onToggleSidebar()"></app-top-bar>
     <div class="content">

@@ -1,10 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-sidebar',
-  standalone: true, // Agregado
-  imports: [],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
 })
-export class SidebarComponent {}
+export class SidebarComponent {
+  @Output() collapseEvent = new EventEmitter<void>();
+
+  onCollapse() {
+    this.collapseEvent.emit();
+  }
+}
