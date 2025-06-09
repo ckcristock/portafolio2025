@@ -1,0 +1,38 @@
+:host {
+  display: block;
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 300px;
+  background-color: var(--background-secundario);
+  color: var(--texto-primario);
+  z-index: 10000;
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+  transform: translateX(100%);
+  transition: transform 0.4s ease-in-out;
+  border-left: 1px solid var(--borde-color);
+}
+
+:host.active {
+  transform: translateX(0);
+}
+
+.details-panel {
+  padding: 2rem;
+  overflow-y: auto;
+  height: 100%;
+}
+
+.details-title {
+  font-size: 1.5rem;
+  color: var(--color-acento);
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.details-description {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--texto-secundario);
+}

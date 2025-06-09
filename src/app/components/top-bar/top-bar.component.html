@@ -1,6 +1,10 @@
 <div class="topbar-content">
   <button class="menu-toggle" (click)="toggleSidebar()">☰</button>
-  <span>Menú Principal</span>
+
+  <div class="user-identity">
+    <span class="name">Cristian Montoya</span>
+    <span class="title">Full-Stack Laravel Developer</span>
+  </div>
   <button class="theme-toggle" (click)="toggleTheme()">
     <span *ngIf="!isDarkMode">☀️</span>
     <span *ngIf="isDarkMode">🌙</span>

@@ -18,21 +18,42 @@
   border: none;
   color: var(--texto-primario);
   cursor: pointer;
-  margin-right: 1rem;
 }
 
 .theme-toggle {
   margin-left: auto;
-  margin-right: 0;
 }
+
+/* --- INICIO DE LA MODIFICACIÓN: Estilos para tu nombre y rol --- */
+.user-identity {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+  margin-left: 1rem;
+}
+
+.user-identity .name {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.user-identity .title {
+  font-size: 0.75rem;
+  font-weight: 300;
+  color: var(--texto-secundario);
+}
+/* --- FIN DE LA MODIFICACIÓN --- */
 
 .menu-toggle {
-  display: none; /* oculto por defecto */
+  display: none;
 }
 
-/* Mostrar botón solo en móviles */
 @media (max-width: 768px) {
   .menu-toggle {
     display: inline-block;
+  }
+  /* En móvil, quizá quieras ocultar el título para ahorrar espacio */
+  .user-identity .title {
+    display: none;
   }
 }

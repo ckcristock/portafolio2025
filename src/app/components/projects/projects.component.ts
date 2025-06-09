@@ -7,14 +7,13 @@ import { Lightbox, LightboxModule } from 'ngx-lightbox';
 @Component({
   selector: 'app-projects',
   standalone: true,
+  // IMPORTANTE: Ya no necesitamos el ImageDetailsComponent
   imports: [CommonModule, ProjectCardComponent, LightboxModule],
   templateUrl: './projects.component.html',
   styleUrls: ['./projects.component.scss'],
 })
 export class ProjectsComponent implements OnInit {
   projects: Project[] = [];
-
-  // La propiedad 'albums' y el método 'prepareLightboxAlbums' han sido eliminados.
 
   constructor(
     private projectService: ProjectService,
@@ -25,32 +24,15 @@ export class ProjectsComponent implements OnInit {
     this.projects = this.projectService.getProjects();
   }
 
-  /**
-   * Este método ahora crea el álbum y abre el carrusel sobre la marcha.
-   * @param projectIndex El índice del proyecto al que se le hizo clic.
-   */
+  // Volvemos a una función 'open' simple y directa
   open(projectIndex: number): void {
-    // console.log('PASO 2: El componente PADRE ha recibido el evento. Abriendo carrusel para el proyecto índice:', projectIndex);
-
-    // 1. Crear el álbum para el lightbox a partir de las imágenes del proyecto específico
     const project = this.projects[projectIndex];
-    const album = project.screenshots.map((screenshot) => {
-      return {
-        src: screenshot.src,
-        caption: screenshot.caption,
-        thumb: screenshot.thumb,
-      };
-    });
+    const album = project.screenshots.map((screenshot) => ({
+      src: screenshot.src,
+      caption: screenshot.caption,
+      thumb: screenshot.thumb,
+    }));
 
-    // 2. Abrir el lightbox con el álbum recién creado
-    this.lightbox.open(album, 0, {
-      centerVertically: true,
-      fitImageInViewPort: true,
-      wrapAround: true,
-    });
-  }
-
-  close(): void {
-    this.lightbox.close();
+    this.lightbox.open(album, 0); // ¡Y ya! Esto abre el carrusel.
   }
 }

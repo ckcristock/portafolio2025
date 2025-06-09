@@ -1,35 +1,34 @@
 :host {
   display: block;
-  padding: 2rem;
+  padding: 0.5rem 2rem 2rem;
   color: var(--texto-primario);
 }
 
 .projects-container h2 {
   text-align: center;
   font-size: 2.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   font-weight: 300;
 }
 
-/* --- INICIO DE LA MODIFICACIÓN --- */
+// Estilo para el nuevo párrafo de introducción
+.intro-text {
+  max-width: 800px;
+  margin: 0 auto 2.5rem auto;
+  text-align: center;
+  line-height: 1.7;
+  font-size: 1.1rem;
+  color: var(--texto-secundario);
+}
 
 .projects-grid {
   display: grid;
   gap: 2rem;
-
-  /* Estilos por defecto (Mobile First): 1 columna */
-  /* Esto soluciona el problema de que las tarjetas se corten en el móvil */
   grid-template-columns: 1fr;
 }
 
-/* Media Query para pantallas más grandes (Tablets y Escritorio) */
-/* Usamos 992px como punto de quiebre para asegurar que haya espacio suficiente */
 @media (min-width: 992px) {
   .projects-grid {
-    /* En pantallas grandes, forzamos un grid de 2 columnas iguales */
-    /* Esto soluciona el problema de que no se viera 2x2 */
     grid-template-columns: 1fr 1fr;
   }
 }
-
-/* --- FIN DE LA MODIFICACIÓN --- */
