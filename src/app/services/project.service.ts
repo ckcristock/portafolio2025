@@ -67,10 +67,10 @@ export class ProjectService {
       title: 'Proyecto "Intelliveer"',
       description:
         'Un software en la nube desarrollado con Laravel y React, enfocado en la gestión de pacientes de ortodoncia.',
-      coverImage: 'assets/images/project3-cover.png',
+      coverImage: 'assets/images/intelliveer-cover.png',
       screenshots: [
         {
-          src: 'assets/images/project3-ss1.png',
+          src: 'assets/images/intelliveer-cover.png',
           caption: 'Vista principal del clima.',
           thumb: 'assets/images/project3-ss1.png',
         },
@@ -81,10 +81,10 @@ export class ProjectService {
       title: 'Intranet Pharmasan',
       description:
         'Una intranet corporativa desarrollada con Express y Vue 3, enfocada en la modernización y migración de la plataforma interna de la empresa.',
-      coverImage: 'assets/images/project4-cover.png',
+      coverImage: 'assets/images/pharmasan-cover.png',
       screenshots: [
         {
-          src: 'assets/images/project4-ss1.png',
+          src: 'assets/images/pharmasan-cover.png',
           caption: 'Vista en modo oscuro.',
           thumb: 'assets/images/project4-ss1.png',
         },
