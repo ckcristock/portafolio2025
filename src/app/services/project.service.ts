@@ -21,9 +21,9 @@ export class ProjectService {
   private readonly projects: Project[] = [
     {
       id: 1,
-      title: 'Proyecto "CRM Pro"',
+      title: 'Proyecto "Fenix ERP"',
       description:
-        'Un sistema de gestión de clientes desarrollado con Angular y Node.js, enfocado en la optimización de ventas.',
+        'Un sistema de gestión integral para ópticas desarrollado con Laravel y React, enfocado en la administración de ventas, inventario y fórmulas de optometría.',
       coverImage: 'assets/images/fenix-cover.png',
       screenshots: [
         {
@@ -45,9 +45,9 @@ export class ProjectService {
     },
     {
       id: 2,
-      title: 'Proyecto "Zenva Runner"',
+      title: 'Proyecto "Ateneo"',
       description:
-        'Videojuego de plataformas 2D para móviles, creado con el motor Godot y exportado a Android.',
+        'Un sistema ERP desarrollado con PHP y Angular, enfocado en la gestión de procesos y recursos para Entidades Prestadoras de Salud (IPS) en Colombia.',
       coverImage: 'assets/images/project2-cover.png',
       screenshots: [
         {
@@ -64,9 +64,9 @@ export class ProjectService {
     },
     {
       id: 3,
-      title: 'Proyecto "Weather Now"',
+      title: 'Proyecto "Intelliveer"',
       description:
-        'Aplicación del clima en tiempo real utilizando React y una API externa para obtener los datos meteorológicos.',
+        'Un software en la nube desarrollado con Laravel y React, enfocado en la gestión de pacientes de ortodoncia.',
       coverImage: 'assets/images/project3-cover.png',
       screenshots: [
         {
@@ -78,9 +78,9 @@ export class ProjectService {
     },
     {
       id: 4,
-      title: 'Mi Portafolio Personal',
+      title: 'Intranet Pharmasan',
       description:
-        'Este mismo portafolio, diseñado para ser rápido, responsivo y mostrar mis habilidades con Angular.',
+        'Una intranet corporativa desarrollada con Express y Vue 3, enfocada en la modernización y migración de la plataforma interna de la empresa.',
       coverImage: 'assets/images/project4-cover.png',
       screenshots: [
         {
