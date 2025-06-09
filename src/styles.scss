@@ -9,16 +9,19 @@ html,
 body {
   height: 100%;
   width: 100%;
-  overflow: hidden;
+  /* --- INICIO DE LA MODIFICACIÓN --- */
+  overflow-y: auto; /* Permite el scroll vertical cuando sea necesario */
+  overflow-x: hidden; /* Previene el scroll horizontal no deseado */
+  /* --- FIN DE LA MODIFICACIÓN --- */
   font-family: sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* ========================================= */
-/* VARIABLES DE TEMA                         */
+/* VARIABLES DE TEMA (Sin cambios)           */
 /* ========================================= */
 
-/* Tema oscuro por defecto (SIN CAMBIOS) */
+/* Tema oscuro por defecto */
 :root {
   --sidebar-bg: #1f1f1f;
   --topbar-bg: #2e2e2e;
