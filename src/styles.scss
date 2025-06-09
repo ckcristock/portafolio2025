@@ -15,10 +15,10 @@ body {
 }
 
 /* ========================================= */
-/* VARIABLES DE TEMA                       */
+/* VARIABLES DE TEMA                         */
 /* ========================================= */
 
-/* Por defecto, usamos las variables del tema oscuro */
+/* Tema oscuro por defecto (SIN CAMBIOS) */
 :root {
   --sidebar-bg: #1f1f1f;
   --topbar-bg: #2e2e2e;
@@ -28,22 +28,18 @@ body {
   --color-acento: #00ffff; /* Aqua */
   --borde-color: #333;
   --sombra-color: rgba(0, 0, 0, 0.4);
-
-  /* --- INICIO DE LA CORRECCIÓN --- */
-  /* Faltaba definir esta variable para el fondo de las tarjetas en modo oscuro */
   --background-secundario: #2e2e2e;
-  /* --- FIN DE LA CORRECCIÓN --- */
 }
 
-/* Cuando el body tenga la clase 'light-mode', se usarán estas variables */
+/* Tema claro mejorado */
 body.light-mode {
-  --sidebar-bg: #f0f2f5;
+  --sidebar-bg: #ffffff;
   --topbar-bg: #ffffff;
-  --contenido-bg: #f4f4f4;
-  --texto-primario: #121212;
-  --texto-secundario: #5a5a5a;
-  --color-acento: #007bff; /* Un azul para el modo claro */
-  --borde-color: #e0e0e0;
+  --contenido-bg: #f8f9fa;
+  --texto-primario: #212529;
+  --texto-secundario: #6c757d;
+  --color-acento: #007bff;
+  --borde-color: #dee2e6;
   --sombra-color: rgba(0, 0, 0, 0.1);
   --background-secundario: #ffffff;
 }

@@ -1,25 +1,68 @@
+/* Estilos base (aplican a ambos modos, principalmente para el oscuro) */
 .sidebar-content {
   padding: 1rem;
   text-align: left;
-  height: 100%; /* Asegura que tome toda la altura del contenedor app-sidebar */
+  height: 100%;
   overflow-y: auto;
+}
 
-  .anaconda-img {
-    width: 100%;
-    max-width: 250px;
-    display: block;
-    margin: 0 auto 1rem;
-  }
+/* --- INICIO DE LA MODIFICACIÓN CLAVE --- */
 
+/* Se definen las dimensiones y espaciados para AMBOS modos para evitar el salto */
+.image-card {
+  margin-bottom: 1.5rem;
+  border-radius: 8px;
+  padding: 0.5rem; /* El padding AHORA ES CONSTANTE */
+  border: 1px solid transparent; /* El borde existe pero es invisible en modo oscuro */
+  background-color: transparent; /* El fondo es invisible en modo oscuro */
+  /* Transición suave para los cambios de color */
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.poem-container {
+  border-radius: 8px;
+  padding: 1.25rem; /* El padding AHORA ES CONSTANTE */
+  border: 1px solid transparent; /* El borde existe pero es invisible */
+  background-color: transparent; /* El fondo es invisible en modo oscuro */
+  /* Transición suave para los cambios de color */
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+
+  /* Estilos de texto que no cambian entre modos */
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--texto-secundario);
+}
+
+.anaconda-img {
+  width: 100%;
+  max-width: 250px;
+  display: block;
+  margin: 0 auto;
+  /* El redondeo de la imagen es constante para evitar saltos */
+  border-radius: 4px;
+}
+
+h1 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: var(--color-acento);
+  /* El padding es constante para evitar movimiento del título */
+  padding-left: 0.25rem;
+}
+
+/* ================================================================ */
+/* ESTILOS EXCLUSIVOS PARA EL MODO CLARO                            */
+/* Ahora solo se cambian colores y sombras, no dimensiones.         */
+/* ================================================================ */
+
+:host-context(body.light-mode) {
+  /* Se "colorean" las tarjetas que antes eran transparentes */
+  .image-card,
   .poem-container {
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--texto-secundario);
-  }
-
-  h1 {
-    font-size: 20px;
-    margin-bottom: 10px;
-    color: var(--color-acento); /* Usando la variable de acento */
+    background-color: var(--contenido-bg);
+    border-color: var(--borde-color);
+    box-shadow: 0 2px 4px var(--sombra-color); /* La sombra no afecta al layout, por lo que puede aparecer y desaparecer sin problemas */
   }
 }
+
+/* --- FIN DE LA MODIFICACIÓN --- */
