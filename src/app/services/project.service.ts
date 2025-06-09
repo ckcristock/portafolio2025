@@ -48,10 +48,10 @@ export class ProjectService {
       title: 'Proyecto "Ateneo"',
       description:
         'Un sistema ERP desarrollado con PHP y Angular, enfocado en la gestión de procesos y recursos para Entidades Prestadoras de Salud (IPS) en Colombia.',
-      coverImage: 'assets/images/project2-cover.png',
+      coverImage: 'assets/images/ateneo-cover.png',
       screenshots: [
         {
-          src: 'assets/images/project2-ss1.png',
+          src: 'assets/images/ateneo-cover.png',
           caption: 'Pantalla de inicio.',
           thumb: 'assets/images/project2-ss1.png',
         },
