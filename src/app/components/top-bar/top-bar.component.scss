@@ -11,20 +11,15 @@
     border-bottom 0.3s ease;
 }
 
-.menu-toggle,
-.theme-toggle {
+.menu-toggle {
   font-size: 24px;
   background: none;
   border: none;
   color: var(--texto-primario);
   cursor: pointer;
+  display: none;
 }
 
-.theme-toggle {
-  margin-left: auto;
-}
-
-/* --- INICIO DE LA MODIFICACIÓN: Estilos para tu nombre y rol --- */
 .user-identity {
   display: flex;
   flex-direction: column;
@@ -42,18 +37,64 @@
   font-weight: 300;
   color: var(--texto-secundario);
 }
-/* --- FIN DE LA MODIFICACIÓN --- */
 
-.menu-toggle {
-  display: none;
+.theme-toggle-container {
+  display: flex;
+  align-items: center;
+  margin-left: auto; /* Empuja el contenedor a la derecha */
+}
+
+/* Estilo para la línea vertical (más visible y a la izquierda) */
+.separator {
+  width: 1.5px; /* Más gruesa para que se note */
+  height: 24px;
+  background-color: var(--texto-secundario); /* Usamos un color más visible */
+  opacity: 0.8;
+  border-radius: 2px;
+  margin-right: 1rem; /* Espacio a la derecha, entre la línea y el switch */
+}
+
+/* Estilos para el botón del switch */
+.theme-toggle {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  padding: 0;
+  background-color: #ccc;
+  border-radius: 24px;
+  border: 1px solid var(--borde-color);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.theme-toggle .switch {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Estado del modo oscuro */
+.theme-toggle.dark-mode {
+  background-color: #3f3f46;
+  border-color: #52525b;
+}
+
+.theme-toggle.dark-mode .switch {
+  transform: translateX(20px);
+  background-color: #d4d4d8;
 }
 
 @media (max-width: 768px) {
-  .menu-toggle {
+  .topbar-content .menu-toggle {
     display: inline-block;
   }
-  /* En móvil, quizá quieras ocultar el título para ahorrar espacio */
-  .user-identity .title {
+  .topbar-content .user-identity .title {
     display: none;
   }
 }

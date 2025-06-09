@@ -5,8 +5,16 @@
     <span class="name">Cristian Montoya</span>
     <span class="title">Full-Stack Laravel Developer</span>
   </div>
-  <button class="theme-toggle" (click)="toggleTheme()">
-    <span *ngIf="!isDarkMode">☀️</span>
-    <span *ngIf="isDarkMode">🌙</span>
-  </button>
+
+  <div class="theme-toggle-container">
+    <div class="separator"></div>
+
+    <button
+      class="theme-toggle"
+      [class.dark-mode]="isDarkMode"
+      (click)="toggleTheme()"
+    >
+      <div class="switch"></div>
+    </button>
+  </div>
 </div>
