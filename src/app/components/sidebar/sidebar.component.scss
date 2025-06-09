@@ -38,7 +38,7 @@ h1,
 /* --- Estilos de las tarjetas y contenido (sin cambios funcionales) --- */
 
 .image-card {
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.5rem;
   border-radius: 8px;
   padding: 0.5rem;
   border: 1px solid transparent;
@@ -49,6 +49,7 @@ h1,
 .poem-container {
   border-radius: 8px;
   padding: 1.25rem;
+  padding-top: 0.5rem;
   border: 1px solid transparent;
   background-color: transparent;
   transition: background-color 0.3s ease, border-color 0.3s ease;
