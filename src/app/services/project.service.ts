@@ -28,19 +28,19 @@ export class ProjectService {
       screenshots: [
         {
           src: 'assets/images/fenix-cover.png',
-          caption: 'Dashboard principal.',
+          caption: 'Login de acceso al sistema.',
           thumb: 'assets/images/fenix-cover.png',
         },
-        {
-          src: 'assets/images/project1-ss2.png',
-          caption: 'Gestión de contactos.',
-          thumb: 'assets/images/project1-ss2.png',
-        },
-        {
-          src: 'assets/images/project1-ss3.png',
-          caption: 'Reportes de ventas.',
-          thumb: 'assets/images/project1-ss3.png',
-        },
+        // {
+        //   src: 'assets/images/project1-ss2.png',
+        //   caption: 'Gestión de contactos.',
+        //   thumb: 'assets/images/project1-ss2.png',
+        // },
+        // {
+        //   src: 'assets/images/project1-ss3.png',
+        //   caption: 'Reportes de ventas.',
+        //   thumb: 'assets/images/project1-ss3.png',
+        // },
       ],
     },
     {
@@ -52,14 +52,14 @@ export class ProjectService {
       screenshots: [
         {
           src: 'assets/images/ateneo-cover.png',
-          caption: 'Pantalla de inicio.',
+          caption: 'Login de acceso al sistema.',
           thumb: 'assets/images/project2-ss1.png',
         },
-        {
-          src: 'assets/images/project2-ss2.png',
-          caption: 'Gameplay del nivel 1.',
-          thumb: 'assets/images/project2-ss2.png',
-        },
+        // {
+        //   src: 'assets/images/project2-ss2.png',
+        //   caption: 'Gameplay del nivel 1.',
+        //   thumb: 'assets/images/project2-ss2.png',
+        // },
       ],
     },
     {
@@ -71,7 +71,7 @@ export class ProjectService {
       screenshots: [
         {
           src: 'assets/images/intelliveer-cover.png',
-          caption: 'Vista principal del clima.',
+          caption: 'Login de acceso al sistema.',
           thumb: 'assets/images/project3-ss1.png',
         },
       ],
@@ -85,14 +85,14 @@ export class ProjectService {
       screenshots: [
         {
           src: 'assets/images/pharmasan-cover.png',
-          caption: 'Vista en modo oscuro.',
+          caption: 'Login de acceso al sistema.',
           thumb: 'assets/images/project4-ss1.png',
         },
-        {
-          src: 'assets/images/project4-ss2.png',
-          caption: 'Vista en modo claro.',
-          thumb: 'assets/images/project4-ss2.png',
-        },
+        // {
+        //   src: 'assets/images/project4-ss2.png',
+        //   caption: 'Vista en modo claro.',
+        //   thumb: 'assets/images/project4-ss2.png',
+        // },
       ],
     },
   ];

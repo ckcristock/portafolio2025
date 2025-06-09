@@ -44,6 +44,20 @@
   margin-left: auto; /* Empuja el contenedor a la derecha */
 }
 
+/* Estilos para el nuevo contenedor de la universidad */
+.university-info {
+  display: flex;
+  align-items: center;
+  margin-right: 1rem; /* Espacio entre el texto y la línea separadora */
+}
+
+.university-info span {
+  font-size: 0.8rem; /* Un tamaño discreto pero legible */
+  font-weight: 400; /* Un peso normal, no tan ligero como el título */
+  color: var(--texto-secundario);
+  white-space: nowrap; /* Evita que el texto se parta en dos líneas */
+}
+
 /* Estilo para la línea vertical (más visible y a la izquierda) */
 .separator {
   width: 1.5px; /* Más gruesa para que se note */
@@ -96,5 +110,9 @@
   }
   .topbar-content .user-identity .title {
     display: none;
+  }
+  /* Regla nueva integrada */
+  .topbar-content .university-info {
+    display: none; /* Oculta la universidad en móviles para ahorrar espacio */
   }
 }
