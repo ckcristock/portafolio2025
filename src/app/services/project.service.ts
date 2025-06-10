@@ -63,13 +63,28 @@ export class ProjectService {
         {
           src: 'assets/images/ateneo-cover.png',
           caption: 'Login de acceso al sistema.',
-          thumb: 'assets/images/project2-ss1.png',
+          thumb: 'assets/images/ateneo-cover.png',
         },
-        // {
-        //   src: 'assets/images/project2-ss2.png',
-        //   caption: 'Gameplay del nivel 1.',
-        //   thumb: 'assets/images/project2-ss2.png',
-        // },
+        {
+          src: 'assets/images/ateneo-dashboard.png',
+          caption: 'Dashboard.',
+          thumb: 'assets/images/ateneo-dashboard.png',
+        },
+        {
+          src: 'assets/images/ateneo-citas.png',
+          caption: 'Programación de citas.',
+          thumb: 'assets/images/ateneo-citas.png',
+        },
+        {
+          src: 'assets/images/ateneo-facturacion.png',
+          caption: 'Facturación.',
+          thumb: 'assets/images/ateneo-facturacion.png',
+        },
+        {
+          src: 'assets/images/ateneo-historia.png',
+          caption: 'Historia clínica.',
+          thumb: 'assets/images/ateneo-historia.png',
+        },
       ],
     },
     {
