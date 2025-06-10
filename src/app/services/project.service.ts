@@ -96,8 +96,28 @@ export class ProjectService {
       screenshots: [
         {
           src: 'assets/images/intelliveer-cover.png',
-          caption: 'Login de acceso al sistema.',
-          thumb: 'assets/images/project3-ss1.png',
+          caption: 'Login.',
+          thumb: 'assets/images/intelliveer-cover.png',
+        },
+        {
+          src: 'assets/images/intelliveer-dashboard.png',
+          caption: 'Dashboard.',
+          thumb: 'assets/images/intelliveer-dashboard.png',
+        },
+        {
+          src: 'assets/images/intelliveer-patients.png',
+          caption: 'Patients and Treatments.',
+          thumb: 'assets/images/intelliveer-patients.png',
+        },
+        {
+          src: 'assets/images/intelliveer-scheduler.png',
+          caption: 'Scheduler.',
+          thumb: 'assets/images/intelliveer-scheduler.png',
+        },
+        {
+          src: 'assets/images/intelliveer-billing.png',
+          caption: 'Billing.',
+          thumb: 'assets/images/intelliveer-billing.png',
         },
       ],
     },
