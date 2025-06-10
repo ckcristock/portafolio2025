@@ -96,13 +96,28 @@ export class ProjectService {
         {
           src: 'assets/images/pharmasan-cover.png',
           caption: 'Login de acceso al sistema.',
-          thumb: 'assets/images/project4-ss1.png',
+          thumb: 'assets/images/pharmasan-cover.png',
         },
-        // {
-        //   src: 'assets/images/project4-ss2.png',
-        //   caption: 'Vista en modo claro.',
-        //   thumb: 'assets/images/project4-ss2.png',
-        // },
+        {
+          src: 'assets/images/pharmasan-dashboard.png',
+          caption: 'Dashboard.',
+          thumb: 'assets/images/pharmasan-dashboard.png',
+        },
+        {
+          src: 'assets/images/pharmasan-inventario.png',
+          caption: 'Gestión de inventario.',
+          thumb: 'assets/images/pharmasan-inventario.png',
+        },
+        {
+          src: 'assets/images/pharmasan-dispensacion.png',
+          caption: 'Dispensación.',
+          thumb: 'assets/images/pharmasan-dispensacion.png',
+        },
+        {
+          src: 'assets/images/pharmasan-calidad.png',
+          caption: 'Gestión de calidad.',
+          thumb: 'assets/images/pharmasan-calidad.png',
+        },
       ],
     },
   ];
