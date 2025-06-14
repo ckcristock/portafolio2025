@@ -13,6 +13,14 @@
   margin-bottom: 1rem; /* Margen inferior para separar del párrafo */
 }
 
+.title-container2 {
+  display: flex;
+  justify-content: center; /* Centra el grupo (icono + texto) en la página */
+  align-items: center; /* Alinea verticalmente el icono y el texto */
+  gap: 1rem; /* Espacio entre el icono y el texto */
+  margin: 2rem; /* Margen inferior para separar del párrafo */
+}
+
 /* Estilo para el logo junto al título */
 .title-logo {
   height: 3.8rem; /* Ajusta la altura del logo para que sea similar a la del texto */

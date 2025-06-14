@@ -14,6 +14,7 @@ import { Lightbox, LightboxModule } from 'ngx-lightbox';
 })
 export class ProjectsComponent implements OnInit {
   projects: Project[] = [];
+  personalProjects: Project[] = [];
 
   constructor(
     private projectService: ProjectService,
@@ -22,6 +23,7 @@ export class ProjectsComponent implements OnInit {
 
   ngOnInit(): void {
     this.projects = this.projectService.getProjects();
+    this.personalProjects = this.projectService.getPersonalProjects();
   }
 
   // Volvemos a una función 'open' simple y directa

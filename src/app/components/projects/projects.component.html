@@ -22,4 +22,16 @@
     >
     </app-project-card>
   </div>
+  <div class="title-container2">
+    <h2>Mis proyectos a nivel personal</h2>
+  </div>
+
+  <div class="projects-grid">
+    <app-project-card
+      *ngFor="let project of personalProjects; let i = index"
+      [project]="project"
+      (cardClick)="open(i)"
+    >
+    </app-project-card>
+  </div>
 </div>

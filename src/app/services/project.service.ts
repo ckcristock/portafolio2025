@@ -88,6 +88,9 @@ export class ProjectService {
         },
       ],
     },
+  ];
+
+  private readonly personalProjects: Project[] = [
     {
       id: 1,
       title: 'Proyecto "Fenix ERP"',
@@ -162,5 +165,8 @@ export class ProjectService {
 
   getProjects(): Project[] {
     return this.projects;
+  }
+  getPersonalProjects(): Project[] {
+    return this.personalProjects;
   }
 }
