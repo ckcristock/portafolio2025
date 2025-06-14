@@ -88,43 +88,6 @@ export class ProjectService {
         },
       ],
     },
-  ];
-
-  private readonly personalProjects: Project[] = [
-    {
-      id: 1,
-      title: 'Proyecto "Fenix ERP"',
-      description:
-        'Un sistema de gestión integral para ópticas desarrollado con Laravel y React, enfocado en la administración de ventas, inventario y fórmulas de optometría.',
-      coverImage: 'assets/images/fenix-cover.png',
-      screenshots: [
-        {
-          src: 'assets/images/fenix-cover.png',
-          caption: 'Login de acceso al sistema.',
-          thumb: 'assets/images/fenix-cover.png',
-        },
-        {
-          src: 'assets/images/fenix-clientes.png',
-          caption: 'Administración de clientes.',
-          thumb: 'assets/images/fenix-clientes.png',
-        },
-        {
-          src: 'assets/images/fenix-inventario.png',
-          caption: 'Gestión de inventario.',
-          thumb: 'assets/images/fenix-inventario.png',
-        },
-        {
-          src: 'assets/images/fenix-ventas.png',
-          caption: 'Gestión de ventas.',
-          thumb: 'assets/images/fenix-ventas.png',
-        },
-        {
-          src: 'assets/images/fenix-reportes.png',
-          caption: 'Reportes.',
-          thumb: 'assets/images/fenix-reportes.png',
-        },
-      ],
-    },
     {
       id: 4,
       title: 'Intranet Pharmasan',
@@ -159,7 +122,43 @@ export class ProjectService {
         },
       ],
     },
+    {
+      id: 1,
+      title: 'Proyecto "Fenix ERP"',
+      description:
+        'Un sistema de gestión integral para ópticas desarrollado con Laravel y React, enfocado en la administración de ventas, inventario y fórmulas de optometría.',
+      coverImage: 'assets/images/fenix-cover.png',
+      screenshots: [
+        {
+          src: 'assets/images/fenix-cover.png',
+          caption: 'Login de acceso al sistema.',
+          thumb: 'assets/images/fenix-cover.png',
+        },
+        {
+          src: 'assets/images/fenix-clientes.png',
+          caption: 'Administración de clientes.',
+          thumb: 'assets/images/fenix-clientes.png',
+        },
+        {
+          src: 'assets/images/fenix-inventario.png',
+          caption: 'Gestión de inventario.',
+          thumb: 'assets/images/fenix-inventario.png',
+        },
+        {
+          src: 'assets/images/fenix-ventas.png',
+          caption: 'Gestión de ventas.',
+          thumb: 'assets/images/fenix-ventas.png',
+        },
+        {
+          src: 'assets/images/fenix-reportes.png',
+          caption: 'Reportes.',
+          thumb: 'assets/images/fenix-reportes.png',
+        },
+      ],
+    },
   ];
+
+  private readonly personalProjects: Project[] = [];
 
   constructor() {}
 
