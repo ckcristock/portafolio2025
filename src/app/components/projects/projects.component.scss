@@ -4,26 +4,32 @@
   color: var(--texto-primario);
 }
 
-.projects-container h2 {
-  text-align: center;
+/* Contenedor del Título y Logo */
+.title-container {
+  display: flex;
+  justify-content: center; /* Centra el grupo (icono + texto) en la página */
+  align-items: center; /* Alinea verticalmente el icono y el texto */
+  gap: 1rem; /* Espacio entre el icono y el texto */
+  margin-bottom: 1rem; /* Margen inferior para separar del párrafo */
+}
+
+/* Estilo para el logo junto al título */
+.title-logo {
+  height: 3.8rem; /* Ajusta la altura del logo para que sea similar a la del texto */
+  width: auto;
+}
+
+/* Se elimina el text-align: center del h2, ya que flexbox lo controla */
+.title-container h2 {
   font-size: 2.5rem;
-  margin-bottom: 1rem;
   font-weight: 300;
+  margin: 0; /* Quitamos el margen del h2 para que se alinee bien */
 }
 
-// Estilo para el nuevo párrafo de introducción
-.intro-text {
-  max-width: 800px;
-  margin: 0 auto 1rem auto;
-  text-align: justify;
-  line-height: 1.7;
-  font-size: 1.1rem;
-  color: var(--texto-secundario);
-}
-
+/* Estilo para el párrafo de introducción */
 .intro-text2 {
   max-width: 800px;
-  margin: 0 auto 2.5rem auto;
+  margin: 0 auto 2.5rem auto; /* Se centra horizontalmente y añade margen inferior */
   text-align: justify;
   line-height: 1.7;
   font-size: 1.1rem;
