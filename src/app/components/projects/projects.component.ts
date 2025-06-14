@@ -37,4 +37,15 @@ export class ProjectsComponent implements OnInit {
 
     this.lightbox.open(album, 0); // ¡Y ya! Esto abre el carrusel.
   }
+
+  openPersonalProjects(projectIndex: number): void {
+    const project = this.personalProjects[projectIndex];
+    const album = project.screenshots.map((screenshot) => ({
+      src: screenshot.src,
+      caption: screenshot.caption,
+      thumb: screenshot.thumb,
+    }));
+
+    this.lightbox.open(album, 0); // Abre el carrusel de proyectos personales.
+  }
 }
