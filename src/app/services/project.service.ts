@@ -21,7 +21,7 @@ export class ProjectService {
   private readonly projects: Project[] = [
     {
       id: 3,
-      title: 'Proyecto "Intelliveer"',
+      title: 'Intelliveer',
       description:
         'Un software en la nube desarrollado con Laravel y React, enfocado en la gestión de pacientes de ortodoncia en estados unidos.',
       coverImage: 'assets/images/intelliveer-cover.png',
@@ -56,7 +56,7 @@ export class ProjectService {
 
     {
       id: 2,
-      title: 'Proyecto "Ateneo"',
+      title: 'Ateneo',
       description:
         'Un sistema ERP desarrollado con PHP y Angular, enfocado en la gestión de procesos y recursos para Entidades Prestadoras de Salud (IPS) en Colombia.',
       coverImage: 'assets/images/ateneo-cover.png',
@@ -126,7 +126,7 @@ export class ProjectService {
       id: 1,
       title: 'Proyecto "Fenix ERP"',
       description:
-        'Un sistema de gestión integral para ópticas desarrollado con Laravel y React, enfocado en la administración de ventas, inventario y fórmulas de optometría.',
+        'Un sistema de gestión integral para ópticas desarrollado con Laravel y React, enfocado en la administración de ventas, inventario y fórmulas de optometría. Es un proyecto personal en el que trabajo en solitario en el momento. Mi intención es tener el ERP listo dentro de un tiempo y venderlo por mí mismo a medianas empresas.',
       coverImage: 'assets/images/fenix-cover.png',
       screenshots: [
         {
