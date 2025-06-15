@@ -57,7 +57,7 @@ export class ProjectService {
       id: 3,
       title: 'Intelliveer',
       description:
-        'Un software en la nube desarrollado con Laravel y React, enfocado en la gestión de pacientes de ortodoncia en estados unidos.',
+        'Un software en la nube desarrollado con Angular y Laravel, enfocado en la gestión de pacientes de ortodoncia.',
       coverImage: 'assets/images/intelliveer-cover.png',
       screenshots: [
         {
