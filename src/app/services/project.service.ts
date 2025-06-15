@@ -19,41 +19,6 @@ export interface Project {
 export class ProjectService {
   // AQUÍ AÑADES TUS PROYECTOS - AHORA CON 4 EJEMPLOS
   private readonly projects: Project[] = [
-    // {
-    //   id: 3,
-    //   title: 'Intelliveer',
-    //   description:
-    //     'Un software en la nube desarrollado con Laravel y React, enfocado en la gestión de pacientes de ortodoncia en estados unidos.',
-    //   coverImage: 'assets/images/intelliveer-cover.png',
-    //   screenshots: [
-    //     {
-    //       src: 'assets/images/intelliveer-cover.png',
-    //       caption: 'Login.',
-    //       thumb: 'assets/images/intelliveer-cover.png',
-    //     },
-    //     {
-    //       src: 'assets/images/intelliveer-dashboard.png',
-    //       caption: 'Dashboard.',
-    //       thumb: 'assets/images/intelliveer-dashboard.png',
-    //     },
-    //     {
-    //       src: 'assets/images/intelliveer-patients.png',
-    //       caption: 'Patients and Treatments.',
-    //       thumb: 'assets/images/intelliveer-patients.png',
-    //     },
-    //     {
-    //       src: 'assets/images/intelliveer-scheduler.png',
-    //       caption: 'Scheduler.',
-    //       thumb: 'assets/images/intelliveer-scheduler.png',
-    //     },
-    //     {
-    //       src: 'assets/images/intelliveer-billing.png',
-    //       caption: 'Billing.',
-    //       thumb: 'assets/images/intelliveer-billing.png',
-    //     },
-    //   ],
-    // },
-
     {
       id: 2,
       title: 'Ateneo',
@@ -85,6 +50,40 @@ export class ProjectService {
           src: 'assets/images/ateneo-historia.png',
           caption: 'Historia clínica.',
           thumb: 'assets/images/ateneo-historia.png',
+        },
+      ],
+    },
+    {
+      id: 3,
+      title: 'Intelliveer',
+      description:
+        'Un software en la nube desarrollado con Laravel y React, enfocado en la gestión de pacientes de ortodoncia en estados unidos.',
+      coverImage: 'assets/images/intelliveer-cover.png',
+      screenshots: [
+        {
+          src: 'assets/images/intelliveer-cover.png',
+          caption: 'Login.',
+          thumb: 'assets/images/intelliveer-cover.png',
+        },
+        {
+          src: 'assets/images/intelliveer-dashboard.png',
+          caption: 'Dashboard.',
+          thumb: 'assets/images/intelliveer-dashboard.png',
+        },
+        {
+          src: 'assets/images/intelliveer-patients.png',
+          caption: 'Patients and Treatments.',
+          thumb: 'assets/images/intelliveer-patients.png',
+        },
+        {
+          src: 'assets/images/intelliveer-scheduler.png',
+          caption: 'Scheduler.',
+          thumb: 'assets/images/intelliveer-scheduler.png',
+        },
+        {
+          src: 'assets/images/intelliveer-billing.png',
+          caption: 'Billing.',
+          thumb: 'assets/images/intelliveer-billing.png',
         },
       ],
     },
@@ -122,40 +121,40 @@ export class ProjectService {
     //     },
     //   ],
     // },
-    {
-      id: 1,
-      title: 'Proyecto "Fenix ERP"',
-      description:
-        'Un sistema de gestión integral para ópticas desarrollado con Angular y Laravel, enfocado en la administración de ventas, inventario y fórmulas de optometría.',
-      coverImage: 'assets/images/fenix-cover.png',
-      screenshots: [
-        {
-          src: 'assets/images/fenix-cover.png',
-          caption: 'Login de acceso al sistema.',
-          thumb: 'assets/images/fenix-cover.png',
-        },
-        {
-          src: 'assets/images/fenix-clientes.png',
-          caption: 'Administración de clientes.',
-          thumb: 'assets/images/fenix-clientes.png',
-        },
-        {
-          src: 'assets/images/fenix-inventario.png',
-          caption: 'Gestión de inventario.',
-          thumb: 'assets/images/fenix-inventario.png',
-        },
-        {
-          src: 'assets/images/fenix-ventas.png',
-          caption: 'Gestión de ventas.',
-          thumb: 'assets/images/fenix-ventas.png',
-        },
-        {
-          src: 'assets/images/fenix-reportes.png',
-          caption: 'Reportes.',
-          thumb: 'assets/images/fenix-reportes.png',
-        },
-      ],
-    },
+    // {
+    //   id: 1,
+    //   title: 'Proyecto "Fenix ERP"',
+    //   description:
+    //     'Un sistema de gestión integral para ópticas desarrollado con Angular y Laravel, enfocado en la administración de ventas, inventario y fórmulas de optometría.',
+    //   coverImage: 'assets/images/fenix-cover.png',
+    //   screenshots: [
+    //     {
+    //       src: 'assets/images/fenix-cover.png',
+    //       caption: 'Login de acceso al sistema.',
+    //       thumb: 'assets/images/fenix-cover.png',
+    //     },
+    //     {
+    //       src: 'assets/images/fenix-clientes.png',
+    //       caption: 'Administración de clientes.',
+    //       thumb: 'assets/images/fenix-clientes.png',
+    //     },
+    //     {
+    //       src: 'assets/images/fenix-inventario.png',
+    //       caption: 'Gestión de inventario.',
+    //       thumb: 'assets/images/fenix-inventario.png',
+    //     },
+    //     {
+    //       src: 'assets/images/fenix-ventas.png',
+    //       caption: 'Gestión de ventas.',
+    //       thumb: 'assets/images/fenix-ventas.png',
+    //     },
+    //     {
+    //       src: 'assets/images/fenix-reportes.png',
+    //       caption: 'Reportes.',
+    //       thumb: 'assets/images/fenix-reportes.png',
+    //     },
+    //   ],
+    // },
   ];
 
   private readonly personalProjects: Project[] = [];
