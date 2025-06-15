@@ -126,7 +126,7 @@ export class ProjectService {
       id: 1,
       title: 'Proyecto "Fenix ERP"',
       description:
-        'Un sistema de gestión integral para ópticas desarrollado con Laravel y React, enfocado en la administración de ventas, inventario y fórmulas de optometría. Es un proyecto personal en el que trabajo en solitario en el momento. Mi intención es tener el ERP listo dentro de un tiempo y venderlo por mí mismo a medianas empresas.',
+        'Un sistema de gestión integral para ópticas desarrollado con Angular y Laravel, enfocado en la administración de ventas, inventario y fórmulas de optometría.',
       coverImage: 'assets/images/fenix-cover.png',
       screenshots: [
         {
