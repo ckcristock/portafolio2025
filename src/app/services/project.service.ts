@@ -19,40 +19,40 @@ export interface Project {
 export class ProjectService {
   // AQUÍ AÑADES TUS PROYECTOS - AHORA CON 4 EJEMPLOS
   private readonly projects: Project[] = [
-    {
-      id: 3,
-      title: 'Intelliveer',
-      description:
-        'Un software en la nube desarrollado con Laravel y React, enfocado en la gestión de pacientes de ortodoncia en estados unidos.',
-      coverImage: 'assets/images/intelliveer-cover.png',
-      screenshots: [
-        {
-          src: 'assets/images/intelliveer-cover.png',
-          caption: 'Login.',
-          thumb: 'assets/images/intelliveer-cover.png',
-        },
-        {
-          src: 'assets/images/intelliveer-dashboard.png',
-          caption: 'Dashboard.',
-          thumb: 'assets/images/intelliveer-dashboard.png',
-        },
-        {
-          src: 'assets/images/intelliveer-patients.png',
-          caption: 'Patients and Treatments.',
-          thumb: 'assets/images/intelliveer-patients.png',
-        },
-        {
-          src: 'assets/images/intelliveer-scheduler.png',
-          caption: 'Scheduler.',
-          thumb: 'assets/images/intelliveer-scheduler.png',
-        },
-        {
-          src: 'assets/images/intelliveer-billing.png',
-          caption: 'Billing.',
-          thumb: 'assets/images/intelliveer-billing.png',
-        },
-      ],
-    },
+    // {
+    //   id: 3,
+    //   title: 'Intelliveer',
+    //   description:
+    //     'Un software en la nube desarrollado con Laravel y React, enfocado en la gestión de pacientes de ortodoncia en estados unidos.',
+    //   coverImage: 'assets/images/intelliveer-cover.png',
+    //   screenshots: [
+    //     {
+    //       src: 'assets/images/intelliveer-cover.png',
+    //       caption: 'Login.',
+    //       thumb: 'assets/images/intelliveer-cover.png',
+    //     },
+    //     {
+    //       src: 'assets/images/intelliveer-dashboard.png',
+    //       caption: 'Dashboard.',
+    //       thumb: 'assets/images/intelliveer-dashboard.png',
+    //     },
+    //     {
+    //       src: 'assets/images/intelliveer-patients.png',
+    //       caption: 'Patients and Treatments.',
+    //       thumb: 'assets/images/intelliveer-patients.png',
+    //     },
+    //     {
+    //       src: 'assets/images/intelliveer-scheduler.png',
+    //       caption: 'Scheduler.',
+    //       thumb: 'assets/images/intelliveer-scheduler.png',
+    //     },
+    //     {
+    //       src: 'assets/images/intelliveer-billing.png',
+    //       caption: 'Billing.',
+    //       thumb: 'assets/images/intelliveer-billing.png',
+    //     },
+    //   ],
+    // },
 
     {
       id: 2,
@@ -88,40 +88,40 @@ export class ProjectService {
         },
       ],
     },
-    {
-      id: 4,
-      title: 'Intranet Pharmasan',
-      description:
-        'Una intranet corporativa desarrollada con Express y Vue 3, enfocada en la modernización y migración de la plataforma interna de la empresa.',
-      coverImage: 'assets/images/pharmasan-cover.png',
-      screenshots: [
-        {
-          src: 'assets/images/pharmasan-cover.png',
-          caption: 'Login de acceso al sistema.',
-          thumb: 'assets/images/pharmasan-cover.png',
-        },
-        {
-          src: 'assets/images/pharmasan-dashboard.png',
-          caption: 'Dashboard.',
-          thumb: 'assets/images/pharmasan-dashboard.png',
-        },
-        {
-          src: 'assets/images/pharmasan-inventario.png',
-          caption: 'Gestión de inventario.',
-          thumb: 'assets/images/pharmasan-inventario.png',
-        },
-        {
-          src: 'assets/images/pharmasan-dispensacion.png',
-          caption: 'Dispensación.',
-          thumb: 'assets/images/pharmasan-dispensacion.png',
-        },
-        {
-          src: 'assets/images/pharmasan-calidad.png',
-          caption: 'Gestión de calidad.',
-          thumb: 'assets/images/pharmasan-calidad.png',
-        },
-      ],
-    },
+    // {
+    //   id: 4,
+    //   title: 'Intranet Pharmasan',
+    //   description:
+    //     'Una intranet corporativa desarrollada con Express y Vue 3, enfocada en la modernización y migración de la plataforma interna de la empresa.',
+    //   coverImage: 'assets/images/pharmasan-cover.png',
+    //   screenshots: [
+    //     {
+    //       src: 'assets/images/pharmasan-cover.png',
+    //       caption: 'Login de acceso al sistema.',
+    //       thumb: 'assets/images/pharmasan-cover.png',
+    //     },
+    //     {
+    //       src: 'assets/images/pharmasan-dashboard.png',
+    //       caption: 'Dashboard.',
+    //       thumb: 'assets/images/pharmasan-dashboard.png',
+    //     },
+    //     {
+    //       src: 'assets/images/pharmasan-inventario.png',
+    //       caption: 'Gestión de inventario.',
+    //       thumb: 'assets/images/pharmasan-inventario.png',
+    //     },
+    //     {
+    //       src: 'assets/images/pharmasan-dispensacion.png',
+    //       caption: 'Dispensación.',
+    //       thumb: 'assets/images/pharmasan-dispensacion.png',
+    //     },
+    //     {
+    //       src: 'assets/images/pharmasan-calidad.png',
+    //       caption: 'Gestión de calidad.',
+    //       thumb: 'assets/images/pharmasan-calidad.png',
+    //     },
+    //   ],
+    // },
     {
       id: 1,
       title: 'Proyecto "Fenix ERP"',
