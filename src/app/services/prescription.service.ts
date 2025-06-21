@@ -8,7 +8,7 @@ import { Prescription } from '../models/data.models';
 })
 export class PrescriptionService {
   private prescriptions: Prescription[] = [
-    // --- Fórmulas para Sofía García (id_cliente: 1) ---
+    // Fórmulas para Sofía García (id_cliente: 1)
     {
       id_formula: 1,
       id_cliente: 1,
@@ -23,7 +23,6 @@ export class PrescriptionService {
       adicion: 2.25,
       observaciones:
         'Prescripción más reciente. Se recomienda antireflejo y Blue Block.',
-      // URL de imagen nueva y confiable
       imageUrl:
         'https://i.postimg.cc/J4v1h6V7/eyeglass-prescription-example.png',
     },
@@ -41,7 +40,6 @@ export class PrescriptionService {
       adicion: 2.0,
       observaciones:
         'Revisión anual. Paciente reporta leve cansancio al final del día.',
-      // Usamos la misma imagen para la prueba
       imageUrl:
         'https://i.postimg.cc/J4v1h6V7/eyeglass-prescription-example.png',
     },
@@ -59,10 +57,8 @@ export class PrescriptionService {
       adicion: 2.0,
       observaciones:
         'Primera prescripción registrada en el sistema. Lentes de lectura.',
-      // Esta fórmula no tendrá imagen para probar que el botón se oculta
     },
-
-    // --- Fórmula para Carlos Martinez (id_cliente: 2) ---
+    // Fórmula para Carlos Martinez (id_cliente: 2)
     {
       id_formula: 3,
       id_cliente: 2,
@@ -89,5 +85,39 @@ export class PrescriptionService {
         )
       )
     );
+  }
+
+  // --- MÉTODOS CRUD AÑADIDOS ---
+
+  addPrescription(
+    prescription: Omit<Prescription, 'id_formula'>
+  ): Observable<Prescription> {
+    const newId =
+      this.prescriptions.length > 0
+        ? Math.max(...this.prescriptions.map((p) => p.id_formula)) + 1
+        : 1;
+    const newPrescription = { ...prescription, id_formula: newId };
+    this.prescriptions.push(newPrescription);
+    return of(newPrescription);
+  }
+
+  updatePrescription(
+    prescriptionToUpdate: Prescription
+  ): Observable<Prescription> {
+    const index = this.prescriptions.findIndex(
+      (p) => p.id_formula === prescriptionToUpdate.id_formula
+    );
+    if (index > -1) {
+      this.prescriptions[index] = prescriptionToUpdate;
+    }
+    return of(prescriptionToUpdate);
+  }
+
+  deletePrescription(id: number): Observable<{}> {
+    const index = this.prescriptions.findIndex((p) => p.id_formula === id);
+    if (index > -1) {
+      this.prescriptions.splice(index, 1);
+    }
+    return of({});
   }
 }
