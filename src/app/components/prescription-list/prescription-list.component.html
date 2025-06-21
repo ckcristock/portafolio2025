@@ -1,0 +1,92 @@
+<div class="container mx-auto p-6">
+  <div class="mb-6">
+    <a routerLink="/clients" class="text-blue-600 hover:underline font-semibold"
+      >&larr; Volver al listado de clientes</a
+    >
+  </div>
+
+  <div *ngIf="client" class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-800">
+      Historial de Fórmulas de {{ client.nombre }} {{ client.apellido }}
+    </h1>
+    <p class="text-gray-600">Documento: {{ client.documento_identidad }}</p>
+  </div>
+
+  <div *ngIf="prescriptions.length > 0; else noPrescriptions">
+    <div
+      *ngFor="let p of prescriptions"
+      class="bg-white p-6 rounded-lg shadow-md mb-6"
+    >
+      <div class="flex justify-between items-baseline mb-4">
+        <h2 class="font-bold text-xl text-gray-700">
+          Fecha de la Consulta: {{ p.fecha | date : "dd / MMMM / yyyy" }}
+        </h2>
+        <span class="text-sm text-gray-500"
+          >ID Fórmula: {{ p.id_formula }}</span
+        >
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-4 mb-4">
+        <div class="text-center p-2 bg-gray-100 rounded">
+          <div class="text-xs font-bold text-gray-500">OD ESFERA</div>
+          <div class="text-lg font-mono">
+            {{ p.od_esfera | number : "1.2-2" }}
+          </div>
+        </div>
+        <div class="text-center p-2 bg-gray-100 rounded">
+          <div class="text-xs font-bold text-gray-500">OD CILINDRO</div>
+          <div class="text-lg font-mono">
+            {{ p.od_cilindro | number : "1.2-2" }}
+          </div>
+        </div>
+        <div class="text-center p-2 bg-gray-100 rounded">
+          <div class="text-xs font-bold text-gray-500">OD EJE</div>
+          <div class="text-lg font-mono">{{ p.od_eje }}°</div>
+        </div>
+        <div class="text-center p-2 bg-gray-100 rounded">
+          <div class="text-xs font-bold text-gray-500">ADICIÓN</div>
+          <div class="text-lg font-mono">
+            {{ p.adicion | number : "1.2-2" }}
+          </div>
+        </div>
+        <div class="text-center p-2 bg-blue-50 rounded">
+          <div class="text-xs font-bold text-blue-800">OI ESFERA</div>
+          <div class="text-lg font-mono text-blue-900">
+            {{ p.oi_esfera | number : "1.2-2" }}
+          </div>
+        </div>
+        <div class="text-center p-2 bg-blue-50 rounded">
+          <div class="text-xs font-bold text-blue-800">OI CILINDRO</div>
+          <div class="text-lg font-mono text-blue-900">
+            {{ p.oi_cilindro | number : "1.2-2" }}
+          </div>
+        </div>
+        <div class="text-center p-2 bg-blue-50 rounded">
+          <div class="text-xs font-bold text-blue-800">OI EJE</div>
+          <div class="text-lg font-mono text-blue-900">{{ p.oi_eje }}°</div>
+        </div>
+        <div class="text-center p-2 bg-blue-50 rounded">
+          <div class="text-xs font-bold text-blue-800">DP</div>
+          <div class="text-lg font-mono text-blue-900">{{ p.dp }} mm</div>
+        </div>
+      </div>
+
+      <div *ngIf="p.observaciones" class="mt-4">
+        <h4 class="font-semibold text-sm text-gray-600">Observaciones:</h4>
+        <p
+          class="text-gray-800 bg-yellow-50 p-3 rounded-md border border-yellow-200"
+        >
+          {{ p.observaciones }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noPrescriptions>
+    <div class="text-center py-10 px-6 bg-white rounded-lg shadow-md">
+      <p class="text-gray-500">
+        Este cliente aún no tiene fórmulas optométricas registradas.
+      </p>
+    </div>
+  </ng-template>
+</div>

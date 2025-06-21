@@ -1,0 +1,132 @@
+<div class="container mx-auto p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-gray-800">Listado de Clientes</h1>
+    <button
+      (click)="openAddForm()"
+      class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300"
+    >
+      &#43; Agregar Cliente
+    </button>
+  </div>
+
+  <div
+    *ngIf="showForm"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+  >
+    <div class="bg-white p-8 rounded-lg shadow-2xl w-full max-w-lg">
+      <h3 class="text-2xl font-bold mb-6">
+        {{ isEditing ? "Editar Cliente" : "Agregar Nuevo Cliente" }}
+      </h3>
+      <form (ngSubmit)="saveClient()">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input
+            [(ngModel)]="currentClient.nombre"
+            name="nombre"
+            placeholder="Nombre"
+            required
+            class="p-2 border rounded-md"
+          />
+          <input
+            [(ngModel)]="currentClient.apellido"
+            name="apellido"
+            placeholder="Apellido"
+            required
+            class="p-2 border rounded-md"
+          />
+          <input
+            [(ngModel)]="currentClient.email"
+            name="email"
+            type="email"
+            placeholder="Email"
+            required
+            class="p-2 border rounded-md md:col-span-2"
+          />
+          <input
+            [(ngModel)]="currentClient.telefono"
+            name="telefono"
+            placeholder="Teléfono"
+            required
+            class="p-2 border rounded-md"
+          />
+          <input
+            [(ngModel)]="currentClient.documento_identidad"
+            name="documento_identidad"
+            placeholder="Documento de Identidad"
+            required
+            class="p-2 border rounded-md"
+          />
+          <input
+            [(ngModel)]="currentClient.direccion"
+            name="direccion"
+            placeholder="Dirección"
+            required
+            class="p-2 border rounded-md md:col-span-2"
+          />
+        </div>
+        <div class="flex justify-end mt-6">
+          <button
+            type="button"
+            (click)="closeForm()"
+            class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg mr-2"
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg"
+          >
+            Guardar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="overflow-x-auto bg-white rounded-lg shadow">
+    <table class="min-w-full">
+      <thead class="bg-gray-200">
+        <tr>
+          <th class="py-3 px-4 text-left text-sm font-semibold text-gray-700">
+            Nombre Completo
+          </th>
+          <th class="py-3 px-4 text-left text-sm font-semibold text-gray-700">
+            Email
+          </th>
+          <th class="py-3 px-4 text-left text-sm font-semibold text-gray-700">
+            Teléfono
+          </th>
+          <th class="py-3 px-4 text-center text-sm font-semibold text-gray-700">
+            Acciones
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let client of clients" class="border-b hover:bg-gray-50">
+          <td class="py-3 px-4">{{ client.nombre }} {{ client.apellido }}</td>
+          <td class="py-3 px-4">{{ client.email }}</td>
+          <td class="py-3 px-4">{{ client.telefono }}</td>
+          <td class="py-3 px-4 text-center">
+            <button
+              (click)="viewPrescriptions(client.id_cliente)"
+              class="text-blue-600 hover:underline text-sm font-semibold mr-4"
+            >
+              Fórmulas
+            </button>
+            <button
+              (click)="openEditForm(client)"
+              class="text-yellow-600 hover:underline text-sm font-semibold mr-4"
+            >
+              Editar
+            </button>
+            <button
+              (click)="deleteClient(client.id_cliente)"
+              class="text-red-600 hover:underline text-sm font-semibold"
+            >
+              Eliminar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
