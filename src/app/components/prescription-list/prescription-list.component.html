@@ -12,7 +12,6 @@
         <h1 class="text-3xl font-bold text-gray-800">
           Historial de {{ client.nombre }} {{ client.apellido }}
         </h1>
-        <p class="text-gray-600">Documento: {{ client.documento_identidad }}</p>
       </div>
     </div>
     <button
@@ -23,7 +22,6 @@
     </button>
   </div>
 
-  <!-- Contenido principal: lista de fórmulas -->
   <div *ngIf="prescriptions.length > 0; else noPrescriptions">
     <div
       *ngFor="let p of prescriptions"
@@ -34,8 +32,8 @@
           <h2 class="font-bold text-xl text-gray-700">
             Fecha: {{ p.fecha | date : "dd / MMMM / yyyy" }}
           </h2>
-          <span class="text-sm text-gray-500"
-            >ID Fórmula: {{ p.id_formula }}</span
+          <span *ngIf="p.folio_doctor" class="text-sm text-gray-500"
+            >Serial: {{ p.folio_doctor }}</span
           >
         </div>
         <div>
@@ -53,9 +51,7 @@
           </button>
         </div>
       </div>
-      <!-- Tarjeta de datos actualizada con Agudeza Visual -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-4 mb-4">
-        <!-- Ojo Izquierdo -->
         <div class="text-center p-2 bg-blue-50 rounded">
           <div class="text-xs font-bold text-blue-800">OI ESFERA</div>
           <div class="text-lg font-mono text-blue-900">
@@ -74,9 +70,8 @@
         </div>
         <div class="text-center p-2 bg-blue-50 rounded">
           <div class="text-xs font-bold text-blue-800">OI AV</div>
-          <div class="text-lg font-mono text-blue-900">{{ p.oi_av }}</div>
+          <div class="text-lg font-mono text-blue-900">{{ p.av_oi }}</div>
         </div>
-        <!-- Ojo Derecho -->
         <div class="text-center p-2 bg-gray-100 rounded">
           <div class="text-xs font-bold text-gray-500">OD ESFERA</div>
           <div class="text-lg font-mono">
@@ -95,10 +90,9 @@
         </div>
         <div class="text-center p-2 bg-gray-100 rounded">
           <div class="text-xs font-bold text-gray-500">OD AV</div>
-          <div class="text-lg font-mono">{{ p.od_av }}</div>
+          <div class="text-lg font-mono">{{ p.av_od }}</div>
         </div>
       </div>
-      <!-- Valores Adicionales -->
       <div class="flex space-x-8 mt-4">
         <div class="text-center p-2 bg-gray-100 rounded flex-1">
           <div class="text-xs font-bold text-gray-500">ADICIÓN</div>
@@ -111,7 +105,6 @@
           <div class="text-lg font-mono">{{ p.dp }} mm</div>
         </div>
       </div>
-
       <div *ngIf="p.observaciones" class="mt-4">
         <h4 class="font-semibold text-sm text-gray-600">Observaciones:</h4>
         <p
@@ -120,9 +113,9 @@
           {{ p.observaciones }}
         </p>
       </div>
-      <div *ngIf="p.imageUrl" class="mt-6 border-t pt-4">
+      <div *ngIf="p.ruta_imagen" class="mt-6 border-t pt-4">
         <button
-          (click)="showImage(p.imageUrl)"
+          (click)="showImage(p.ruta_imagen)"
           class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700"
         >
           <i class="fas fa-image mr-2"></i>Ver Imagen de la Fórmula
@@ -139,7 +132,7 @@
   </ng-template>
 </div>
 
-<!-- FORMULARIO MODAL PARA AGREGAR/EDITAR FÓRMULA (ACTUALIZADO) -->
+<!-- FORMULARIO MODAL PARA AGREGAR/EDITAR FÓRMULA -->
 <div
   *ngIf="showForm"
   class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4"
@@ -152,10 +145,9 @@
     </h3>
     <form (ngSubmit)="savePrescription()" #prescriptionForm="ngForm">
       <fieldset class="mb-6">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label class="block text-sm font-medium text-gray-700"
-              >Fecha de la Fórmula</label
+            <label class="block text-sm font-medium text-gray-700">Fecha</label
             ><input
               type="date"
               [(ngModel)]="currentPrescription.fecha"
@@ -166,7 +158,17 @@
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700"
-              >Subir Imagen de la Fórmula</label
+              >Serial (Opcional)</label
+            ><input
+              type="text"
+              [(ngModel)]="currentPrescription.folio_doctor"
+              name="folio_doctor"
+              class="mt-1 p-2 border rounded-md w-full"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700"
+              >Subir Imagen</label
             ><input
               type="file"
               (change)="onFileSelected($event)"
@@ -176,10 +178,7 @@
           </div>
         </div>
       </fieldset>
-
-      <!-- Sección de Graduación Reordenada -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8">
-        <!-- Columna Ojo Izquierdo (A LA IZQUIERDA) -->
         <fieldset class="border rounded-md p-4">
           <legend class="text-lg font-semibold text-blue-800 px-2">
             Ojo Izquierdo (OI)
@@ -193,7 +192,6 @@
                 step="0.01"
                 [(ngModel)]="currentPrescription.oi_esfera"
                 name="oi_esfera"
-                required
                 class="mt-1 p-2 border rounded-md w-full"
               />
             </div>
@@ -205,7 +203,6 @@
                 step="0.01"
                 [(ngModel)]="currentPrescription.oi_cilindro"
                 name="oi_cilindro"
-                required
                 class="mt-1 p-2 border rounded-md w-full"
               />
             </div>
@@ -215,7 +212,6 @@
                 type="number"
                 [(ngModel)]="currentPrescription.oi_eje"
                 name="oi_eje"
-                required
                 class="mt-1 p-2 border rounded-md w-full"
               />
             </div>
@@ -224,16 +220,14 @@
                 >Agudeza Visual (AV)</label
               ><input
                 type="text"
-                [(ngModel)]="currentPrescription.oi_av"
-                name="oi_av"
+                [(ngModel)]="currentPrescription.av_oi"
+                name="av_oi"
                 placeholder="Ej: 20/20"
-                required
                 class="mt-1 p-2 border rounded-md w-full"
               />
             </div>
           </div>
         </fieldset>
-        <!-- Columna Ojo Derecho (A LA DERECHA) -->
         <fieldset class="border rounded-md p-4">
           <legend class="text-lg font-semibold text-gray-800 px-2">
             Ojo Derecho (OD)
@@ -247,7 +241,6 @@
                 step="0.01"
                 [(ngModel)]="currentPrescription.od_esfera"
                 name="od_esfera"
-                required
                 class="mt-1 p-2 border rounded-md w-full"
               />
             </div>
@@ -259,7 +252,6 @@
                 step="0.01"
                 [(ngModel)]="currentPrescription.od_cilindro"
                 name="od_cilindro"
-                required
                 class="mt-1 p-2 border rounded-md w-full"
               />
             </div>
@@ -269,7 +261,6 @@
                 type="number"
                 [(ngModel)]="currentPrescription.od_eje"
                 name="od_eje"
-                required
                 class="mt-1 p-2 border rounded-md w-full"
               />
             </div>
@@ -278,17 +269,15 @@
                 >Agudeza Visual (AV)</label
               ><input
                 type="text"
-                [(ngModel)]="currentPrescription.od_av"
-                name="od_av"
+                [(ngModel)]="currentPrescription.av_od"
+                name="av_od"
                 placeholder="Ej: 20/20"
-                required
                 class="mt-1 p-2 border rounded-md w-full"
               />
             </div>
           </div>
         </fieldset>
       </div>
-
       <fieldset class="border rounded-md p-4 mt-6">
         <legend class="text-lg font-semibold text-gray-800 px-2">
           Valores Adicionales
@@ -302,7 +291,6 @@
               step="0.01"
               [(ngModel)]="currentPrescription.adicion"
               name="adicion"
-              required
               class="mt-1 p-2 border rounded-md w-full"
             />
           </div>
@@ -314,7 +302,6 @@
               step="0.1"
               [(ngModel)]="currentPrescription.dp"
               name="dp"
-              required
               class="mt-1 p-2 border rounded-md w-full"
             />
           </div>
@@ -330,7 +317,6 @@
           rows="3"
         ></textarea>
       </div>
-
       <div class="flex justify-end mt-8">
         <button
           type="button"
@@ -349,7 +335,6 @@
     </form>
   </div>
 </div>
-
 <div
   *ngIf="selectedImageUrl"
   (click)="closeImageModal()"
