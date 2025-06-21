@@ -132,18 +132,35 @@
   </ng-template>
 </div>
 
-<!-- FORMULARIO MODAL PARA AGREGAR/EDITAR FÓRMULA -->
+<!-- FORMULARIO MODAL (ACTUALIZADO) -->
 <div
   *ngIf="showForm"
+  (click)="closeForm()"
   class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4"
 >
+  <!-- AÑADIDO: #formModal y (click) para detener la propagación -->
   <div
+    #formModal
+    (click)="$event.stopPropagation()"
     class="bg-white p-8 rounded-lg shadow-2xl w-full max-w-4xl max-h-[95vh] overflow-y-auto"
   >
     <h3 class="text-2xl font-bold mb-6">
       {{ isEditing ? "Editar Fórmula Optométrica" : "Agregar Nueva Fórmula" }}
     </h3>
     <form (ngSubmit)="savePrescription()" #prescriptionForm="ngForm">
+      <div
+        *ngIf="validationErrors['general']"
+        class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
+        role="alert"
+      >
+        <strong class="font-bold">¡Error!</strong>
+        <span
+          class="block sm:inline"
+          *ngFor="let error of validationErrors['general']"
+          >{{ error }}</span
+        >
+      </div>
+
       <fieldset class="mb-6">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
@@ -158,13 +175,23 @@
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700"
-              >Serial (Opcional)</label
-            ><input
+              >Serial</label
+            >
+            <input
               type="text"
               [(ngModel)]="currentPrescription.folio_doctor"
               name="folio_doctor"
+              required
               class="mt-1 p-2 border rounded-md w-full"
             />
+            <div
+              *ngIf="validationErrors['folio_doctor']"
+              class="text-red-600 text-sm mt-1"
+            >
+              <p *ngFor="let error of validationErrors['folio_doctor']">
+                {{ error }}
+              </p>
+            </div>
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700"
@@ -178,6 +205,7 @@
           </div>
         </div>
       </fieldset>
+
       <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8">
         <fieldset class="border rounded-md p-4">
           <legend class="text-lg font-semibold text-blue-800 px-2">
@@ -278,6 +306,7 @@
           </div>
         </fieldset>
       </div>
+
       <fieldset class="border rounded-md p-4 mt-6">
         <legend class="text-lg font-semibold text-gray-800 px-2">
           Valores Adicionales
@@ -317,24 +346,50 @@
           rows="3"
         ></textarea>
       </div>
+
+      <!-- Botón de Guardar actualizado -->
       <div class="flex justify-end mt-8">
         <button
           type="button"
           (click)="closeForm()"
           class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg mr-2"
         >
-          Cancelar</button
-        ><button
+          Cancelar
+        </button>
+        <button
           type="submit"
-          [disabled]="!prescriptionForm.form.valid"
-          class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg disabled:opacity-50"
+          [disabled]="!prescriptionForm.form.valid || isSaving"
+          class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg disabled:opacity-50 flex items-center"
         >
-          Guardar
+          <svg
+            *ngIf="isSaving"
+            class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
+          <span *ngIf="isSaving">Guardando...</span>
+          <span *ngIf="!isSaving">Guardar</span>
         </button>
       </div>
     </form>
   </div>
 </div>
+
 <div
   *ngIf="selectedImageUrl"
   (click)="closeImageModal()"

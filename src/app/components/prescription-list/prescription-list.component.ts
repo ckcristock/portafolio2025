@@ -1,9 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  HostListener,
+  ViewChild,
+  ElementRef,
+} from '@angular/core'; // <-- Importamos ViewChild y ElementRef
 import { CommonModule, formatDate } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
 import { switchMap, tap, catchError } from 'rxjs/operators';
-import { Observable, of } from 'rxjs'; // 'of' se importa desde 'rxjs'
+import { Observable, of } from 'rxjs';
 import { PrescriptionService } from '../../services/prescription.service';
 import { ClientService } from '../../services/client.service';
 import { Prescription, Client } from '../../models/data.models';
@@ -27,6 +34,19 @@ export class PrescriptionListComponent implements OnInit {
   currentPrescription!: Partial<Prescription>;
   selectedFile: File | null = null;
 
+  validationErrors: { [key: string]: string[] } = {};
+  isSaving = false; // <-- AÑADIDO: Propiedad para el estado de carga
+
+  // --- AÑADIDO: Referencia al contenedor del modal para hacer scroll ---
+  @ViewChild('formModal') formModal!: ElementRef;
+
+  @HostListener('window:keydown.escape', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if (this.showForm) {
+      this.closeForm();
+    }
+  }
+
   constructor(
     private route: ActivatedRoute,
     private prescriptionService: PrescriptionService,
@@ -39,7 +59,7 @@ export class PrescriptionListComponent implements OnInit {
         tap((params) => {
           this.clientId = Number(params.get('clientId'));
         }),
-        switchMap(() => this.clientService.getClient(this.clientId)), // Corregido: usa getClient
+        switchMap(() => this.clientService.getClient(this.clientId)),
         tap((client) => {
           this.client = client;
         }),
@@ -69,12 +89,12 @@ export class PrescriptionListComponent implements OnInit {
   }
 
   savePrescription(): void {
-    const formData = new FormData();
+    this.validationErrors = {};
+    this.isSaving = true; // <-- Activamos el estado de carga
 
-    // Construimos el FormData a partir del objeto del formulario
+    const formData = new FormData();
     Object.keys(this.currentPrescription).forEach((key) => {
       const value = (this.currentPrescription as any)[key];
-      // Solo añadimos el valor si no es nulo, para no enviar campos vacíos innecesarios
       if (value !== null && value !== undefined) {
         formData.append(key, value);
       }
@@ -91,23 +111,40 @@ export class PrescriptionListComponent implements OnInit {
     let saveObservable: Observable<Prescription>;
 
     if (this.isEditing) {
-      // Corregido: Llamada al servicio con los argumentos correctos
       saveObservable = this.prescriptionService.updatePrescription(
         this.currentPrescription.id_formula!,
         formData
       );
     } else {
       formData.append('id_cliente', this.clientId.toString());
-      // Corregido: Llamada al servicio con el argumento correcto
       saveObservable = this.prescriptionService.addPrescription(formData);
     }
 
     saveObservable.subscribe({
       next: () => {
+        this.isSaving = false; // <-- Desactivamos el estado de carga
         this.loadPrescriptions().subscribe();
         this.closeForm();
       },
-      error: (err) => console.error('Error al guardar la fórmula', err),
+      error: (err: HttpErrorResponse) => {
+        this.isSaving = false; // <-- Desactivamos el estado de carga
+        if (err.status === 422 && err.error && err.error.errors) {
+          this.validationErrors = err.error.errors;
+          // --- AÑADIDO: Hacemos scroll hacia arriba para mostrar el error ---
+          try {
+            this.formModal.nativeElement.scrollTop = 0;
+          } catch (scrollErr) {
+            console.error('No se pudo hacer scroll al error', scrollErr);
+          }
+        } else {
+          this.validationErrors = {
+            general: [
+              'Ocurrió un error inesperado. Por favor, inténtelo de nuevo.',
+            ],
+          };
+        }
+        console.error('Error al guardar la fórmula', err);
+      },
     });
   }
 
@@ -131,6 +168,7 @@ export class PrescriptionListComponent implements OnInit {
   }
 
   openAddForm(): void {
+    this.validationErrors = {};
     this.isEditing = false;
     this.selectedFile = null;
     this.currentPrescription = this.getInitialPrescriptionForm();
@@ -138,6 +176,7 @@ export class PrescriptionListComponent implements OnInit {
   }
 
   openEditForm(prescription: Prescription): void {
+    this.validationErrors = {};
     this.isEditing = true;
     this.selectedFile = null;
     this.currentPrescription = { ...prescription };

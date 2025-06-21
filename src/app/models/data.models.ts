@@ -8,22 +8,21 @@ export interface Client {
   documento_identidad: string;
 }
 
-// Esta interfaz ahora coincide 100% con tu backend
 export interface Prescription {
   id_formula: number;
   id_cliente: number;
-  folio_doctor: string | null;
+  folio_doctor: string; // <-- Cambiado de string | null a solo string
   fecha: string;
   od_esfera: number | null;
   od_cilindro: number | null;
   od_eje: number | null;
-  av_od: string | null; // Corregido
+  av_od: string | null;
   oi_esfera: number | null;
   oi_cilindro: number | null;
   oi_eje: number | null;
-  av_oi: string | null; // Corregido
+  av_oi: string | null;
   dp: number | null;
   adicion: number | null;
   observaciones: string | null;
-  ruta_imagen: string | null; // Corregido
+  ruta_imagen: string | null;
 }
