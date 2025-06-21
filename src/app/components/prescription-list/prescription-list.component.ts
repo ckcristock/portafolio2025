@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common'; // <-- IMPORTANTE: Importa CommonModule
+import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 import { PrescriptionService } from '../../services/prescription.service';
@@ -9,16 +9,16 @@ import { Prescription, Client } from '../../models/data.models';
 @Component({
   selector: 'app-prescription-list',
   standalone: true,
-  // IMPORTANTE: Agrega CommonModule aquí. Esto soluciona los errores
-  // de *ngIf, *ngFor y los pipes 'date' y 'number'.
   imports: [CommonModule, RouterModule],
   templateUrl: './prescription-list.component.html',
   styleUrls: ['./prescription-list.component.scss'],
 })
 export class PrescriptionListComponent implements OnInit {
-  // Declaraciones de las propiedades que usará la plantilla HTML
   prescriptions: Prescription[] = [];
-  client: Client | undefined; // <-- IMPORTANTE: Esta es la propiedad 'client' que faltaba
+  client: Client | undefined;
+
+  // Propiedad para guardar la URL de la imagen que se mostrará en el modal
+  selectedImageUrl: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -31,15 +31,29 @@ export class PrescriptionListComponent implements OnInit {
       .pipe(
         switchMap((params) => {
           const clientId = Number(params.get('clientId'));
-          // Cargar datos del cliente y sus prescripciones
-          this.clientService.getClient(clientId).subscribe((client) => {
-            this.client = client; // Asignamos el valor a la propiedad 'client'
-          });
+          this.clientService
+            .getClient(clientId)
+            .subscribe((client) => (this.client = client));
           return this.prescriptionService.getPrescriptions(clientId);
         })
       )
       .subscribe((prescriptions) => {
         this.prescriptions = prescriptions;
       });
+  }
+
+  /**
+   * Muestra el modal con la imagen seleccionada.
+   * @param imageUrl La URL de la imagen a mostrar.
+   */
+  showImage(imageUrl: string): void {
+    this.selectedImageUrl = imageUrl;
+  }
+
+  /**
+   * Cierra el modal de la imagen.
+   */
+  closeImageModal(): void {
+    this.selectedImageUrl = null;
   }
 }

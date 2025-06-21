@@ -1,5 +1,3 @@
-// src/app/models/data.models.ts
-
 export interface Client {
   id_cliente: number;
   nombre: string;
@@ -13,7 +11,7 @@ export interface Client {
 export interface Prescription {
   id_formula: number;
   id_cliente: number;
-  fecha: string; // Se usa string para simplicidad, pero puede ser un objeto Date
+  fecha: string;
   od_esfera: number;
   od_cilindro: number;
   od_eje: number;
@@ -23,4 +21,5 @@ export interface Prescription {
   dp: number;
   adicion: number;
   observaciones: string;
+  imageUrl?: string; // <-- AÑADIDO: Propiedad para la URL de la imagen (opcional)
 }

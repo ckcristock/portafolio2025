@@ -1,5 +1,3 @@
-// src/app/services/prescription.service.ts
-
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -9,36 +7,62 @@ import { Prescription } from '../models/data.models';
   providedIn: 'root',
 })
 export class PrescriptionService {
-  // Datos de ejemplo simulando la tabla 'formula_optometrica'
   private prescriptions: Prescription[] = [
+    // --- Fórmulas para Sofía García (id_cliente: 1) ---
     {
       id_formula: 1,
       id_cliente: 1,
-      fecha: '2025-06-06',
-      od_esfera: -1.5,
-      od_cilindro: -0.75,
-      od_eje: 90,
-      oi_esfera: -2,
-      oi_cilindro: -0.5,
-      oi_eje: 180,
-      dp: 60.5,
-      adicion: 2,
-      observaciones: 'Primer registro de formula con imagen.',
+      fecha: '2025-06-20',
+      od_esfera: -1.75,
+      od_cilindro: -0.5,
+      od_eje: 95,
+      oi_esfera: -2.25,
+      oi_cilindro: -0.75,
+      oi_eje: 175,
+      dp: 61.0,
+      adicion: 2.25,
+      observaciones:
+        'Prescripción más reciente. Se recomienda antireflejo y Blue Block.',
+      // URL de imagen nueva y confiable
+      imageUrl:
+        'https://i.postimg.cc/J4v1h6V7/eyeglass-prescription-example.png',
     },
     {
       id_formula: 2,
       id_cliente: 1,
-      fecha: '2024-05-20',
+      fecha: '2024-05-15',
+      od_esfera: -1.5,
+      od_cilindro: -0.5,
+      od_eje: 90,
+      oi_esfera: -2.0,
+      oi_cilindro: -0.75,
+      oi_eje: 180,
+      dp: 60.5,
+      adicion: 2.0,
+      observaciones:
+        'Revisión anual. Paciente reporta leve cansancio al final del día.',
+      // Usamos la misma imagen para la prueba
+      imageUrl:
+        'https://i.postimg.cc/J4v1h6V7/eyeglass-prescription-example.png',
+    },
+    {
+      id_formula: 4,
+      id_cliente: 1,
+      fecha: '2023-04-30',
       od_esfera: -1.25,
-      od_cilindro: -0.75,
+      od_cilindro: -0.5,
       od_eje: 90,
       oi_esfera: -1.75,
       oi_cilindro: -0.5,
       oi_eje: 180,
       dp: 60.5,
-      adicion: 2,
-      observaciones: 'Revisión anual.',
+      adicion: 2.0,
+      observaciones:
+        'Primera prescripción registrada en el sistema. Lentes de lectura.',
+      // Esta fórmula no tendrá imagen para probar que el botón se oculta
     },
+
+    // --- Fórmula para Carlos Martinez (id_cliente: 2) ---
     {
       id_formula: 3,
       id_cliente: 2,
@@ -49,15 +73,14 @@ export class PrescriptionService {
       oi_esfera: -0.75,
       oi_cilindro: 0,
       oi_eje: 0,
-      dp: 62,
+      dp: 62.0,
       adicion: 1.5,
-      observaciones: 'Lentes para lectura.',
+      observaciones: 'Lentes para lectura ocasional.',
     },
   ];
 
   constructor() {}
 
-  // Obtener fórmulas de un cliente y ordenarlas por fecha descendente
   getPrescriptions(clientId: number): Observable<Prescription[]> {
     return of(this.prescriptions.filter((p) => p.id_cliente === clientId)).pipe(
       map((prescriptions) =>

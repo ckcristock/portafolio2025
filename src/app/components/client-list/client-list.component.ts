@@ -1,9 +1,7 @@
-// src/app/components/client-list/client-list.component.ts
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms'; // Necesario para ngModel
+import { FormsModule } from '@angular/forms';
 import { ClientService } from '../../services/client.service';
 import { Client } from '../../models/data.models';
 
@@ -52,7 +50,7 @@ export class ClientListComponent implements OnInit {
 
   openEditForm(client: Client): void {
     this.isEditing = true;
-    this.currentClient = { ...client }; // Clonar el objeto para no modificar la lista directamente
+    this.currentClient = { ...client };
     this.showForm = true;
   }
 
@@ -84,6 +82,11 @@ export class ClientListComponent implements OnInit {
     this.showForm = false;
   }
 
+  /**
+   * Esta es la función clave para la navegación.
+   * Utiliza el Router de Angular para cambiar a la vista de prescripciones,
+   * pasando el ID del cliente en la URL.
+   */
   viewPrescriptions(clientId: number): void {
     this.router.navigate(['/prescriptions', clientId]);
   }
