@@ -15,11 +15,13 @@ export interface Prescription {
   od_esfera: number;
   od_cilindro: number;
   od_eje: number;
+  od_av: string; // <-- AÑADIDO: Agudeza Visual Ojo Derecho
   oi_esfera: number;
   oi_cilindro: number;
   oi_eje: number;
+  oi_av: string; // <-- AÑADIDO: Agudeza Visual Ojo Izquierdo
   dp: number;
   adicion: number;
   observaciones: string;
-  imageUrl?: string; // <-- AÑADIDO: Propiedad para la URL de la imagen (opcional)
+  imageUrl?: string;
 }

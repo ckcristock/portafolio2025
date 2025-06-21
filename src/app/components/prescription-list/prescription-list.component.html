@@ -53,29 +53,9 @@
           </button>
         </div>
       </div>
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-4 mb-4">
-        <div class="text-center p-2 bg-gray-100 rounded">
-          <div class="text-xs font-bold text-gray-500">OD ESFERA</div>
-          <div class="text-lg font-mono">
-            {{ p.od_esfera | number : "1.2-2" }}
-          </div>
-        </div>
-        <div class="text-center p-2 bg-gray-100 rounded">
-          <div class="text-xs font-bold text-gray-500">OD CILINDRO</div>
-          <div class="text-lg font-mono">
-            {{ p.od_cilindro | number : "1.2-2" }}
-          </div>
-        </div>
-        <div class="text-center p-2 bg-gray-100 rounded">
-          <div class="text-xs font-bold text-gray-500">OD EJE</div>
-          <div class="text-lg font-mono">{{ p.od_eje }}°</div>
-        </div>
-        <div class="text-center p-2 bg-gray-100 rounded">
-          <div class="text-xs font-bold text-gray-500">ADICIÓN</div>
-          <div class="text-lg font-mono">
-            {{ p.adicion | number : "1.2-2" }}
-          </div>
-        </div>
+      <!-- Tarjeta de datos actualizada con Agudeza Visual -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-4 mb-4">
+        <!-- Ojo Izquierdo -->
         <div class="text-center p-2 bg-blue-50 rounded">
           <div class="text-xs font-bold text-blue-800">OI ESFERA</div>
           <div class="text-lg font-mono text-blue-900">
@@ -93,10 +73,45 @@
           <div class="text-lg font-mono text-blue-900">{{ p.oi_eje }}°</div>
         </div>
         <div class="text-center p-2 bg-blue-50 rounded">
-          <div class="text-xs font-bold text-blue-800">DP</div>
-          <div class="text-lg font-mono text-blue-900">{{ p.dp }} mm</div>
+          <div class="text-xs font-bold text-blue-800">OI AV</div>
+          <div class="text-lg font-mono text-blue-900">{{ p.oi_av }}</div>
+        </div>
+        <!-- Ojo Derecho -->
+        <div class="text-center p-2 bg-gray-100 rounded">
+          <div class="text-xs font-bold text-gray-500">OD ESFERA</div>
+          <div class="text-lg font-mono">
+            {{ p.od_esfera | number : "1.2-2" }}
+          </div>
+        </div>
+        <div class="text-center p-2 bg-gray-100 rounded">
+          <div class="text-xs font-bold text-gray-500">OD CILINDRO</div>
+          <div class="text-lg font-mono">
+            {{ p.od_cilindro | number : "1.2-2" }}
+          </div>
+        </div>
+        <div class="text-center p-2 bg-gray-100 rounded">
+          <div class="text-xs font-bold text-gray-500">OD EJE</div>
+          <div class="text-lg font-mono">{{ p.od_eje }}°</div>
+        </div>
+        <div class="text-center p-2 bg-gray-100 rounded">
+          <div class="text-xs font-bold text-gray-500">OD AV</div>
+          <div class="text-lg font-mono">{{ p.od_av }}</div>
         </div>
       </div>
+      <!-- Valores Adicionales -->
+      <div class="flex space-x-8 mt-4">
+        <div class="text-center p-2 bg-gray-100 rounded flex-1">
+          <div class="text-xs font-bold text-gray-500">ADICIÓN</div>
+          <div class="text-lg font-mono">
+            {{ p.adicion | number : "1.2-2" }}
+          </div>
+        </div>
+        <div class="text-center p-2 bg-gray-100 rounded flex-1">
+          <div class="text-xs font-bold text-gray-500">DP</div>
+          <div class="text-lg font-mono">{{ p.dp }} mm</div>
+        </div>
+      </div>
+
       <div *ngIf="p.observaciones" class="mt-4">
         <h4 class="font-semibold text-sm text-gray-600">Observaciones:</h4>
         <p
@@ -124,7 +139,7 @@
   </ng-template>
 </div>
 
-<!-- FORMULARIO MODAL PARA AGREGAR/EDITAR FÓRMULA -->
+<!-- FORMULARIO MODAL PARA AGREGAR/EDITAR FÓRMULA (ACTUALIZADO) -->
 <div
   *ngIf="showForm"
   class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4"
@@ -136,14 +151,12 @@
       {{ isEditing ? "Editar Fórmula Optométrica" : "Agregar Nueva Fórmula" }}
     </h3>
     <form (ngSubmit)="savePrescription()" #prescriptionForm="ngForm">
-      <!-- Sección de Datos Generales -->
       <fieldset class="mb-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label class="block text-sm font-medium text-gray-700"
               >Fecha de la Fórmula</label
-            >
-            <input
+            ><input
               type="date"
               [(ngModel)]="currentPrescription.fecha"
               name="fecha"
@@ -152,11 +165,9 @@
             />
           </div>
           <div>
-            <!-- AÑADIDO: Campo para subir la imagen -->
             <label class="block text-sm font-medium text-gray-700"
               >Subir Imagen de la Fórmula</label
-            >
-            <input
+            ><input
               type="file"
               (change)="onFileSelected($event)"
               accept="image/*"
@@ -166,9 +177,9 @@
         </div>
       </fieldset>
 
-      <!-- Sección de Graduación -->
+      <!-- Sección de Graduación Reordenada -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8">
-        <!-- Columna Ojo Izquierdo -->
+        <!-- Columna Ojo Izquierdo (A LA IZQUIERDA) -->
         <fieldset class="border rounded-md p-4">
           <legend class="text-lg font-semibold text-blue-800 px-2">
             Ojo Izquierdo (OI)
@@ -177,8 +188,7 @@
             <div>
               <label class="block text-sm font-medium text-gray-700"
                 >Esfera</label
-              >
-              <input
+              ><input
                 type="number"
                 step="0.01"
                 [(ngModel)]="currentPrescription.oi_esfera"
@@ -190,8 +200,7 @@
             <div>
               <label class="block text-sm font-medium text-gray-700"
                 >Cilindro</label
-              >
-              <input
+              ><input
                 type="number"
                 step="0.01"
                 [(ngModel)]="currentPrescription.oi_cilindro"
@@ -201,8 +210,8 @@
               />
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700">Eje</label>
-              <input
+              <label class="block text-sm font-medium text-gray-700">Eje</label
+              ><input
                 type="number"
                 [(ngModel)]="currentPrescription.oi_eje"
                 name="oi_eje"
@@ -210,9 +219,21 @@
                 class="mt-1 p-2 border rounded-md w-full"
               />
             </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700"
+                >Agudeza Visual (AV)</label
+              ><input
+                type="text"
+                [(ngModel)]="currentPrescription.oi_av"
+                name="oi_av"
+                placeholder="Ej: 20/20"
+                required
+                class="mt-1 p-2 border rounded-md w-full"
+              />
+            </div>
           </div>
         </fieldset>
-        <!-- Columna Ojo Derecho -->
+        <!-- Columna Ojo Derecho (A LA DERECHA) -->
         <fieldset class="border rounded-md p-4">
           <legend class="text-lg font-semibold text-gray-800 px-2">
             Ojo Derecho (OD)
@@ -221,8 +242,7 @@
             <div>
               <label class="block text-sm font-medium text-gray-700"
                 >Esfera</label
-              >
-              <input
+              ><input
                 type="number"
                 step="0.01"
                 [(ngModel)]="currentPrescription.od_esfera"
@@ -234,8 +254,7 @@
             <div>
               <label class="block text-sm font-medium text-gray-700"
                 >Cilindro</label
-              >
-              <input
+              ><input
                 type="number"
                 step="0.01"
                 [(ngModel)]="currentPrescription.od_cilindro"
@@ -245,11 +264,23 @@
               />
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700">Eje</label>
-              <input
+              <label class="block text-sm font-medium text-gray-700">Eje</label
+              ><input
                 type="number"
                 [(ngModel)]="currentPrescription.od_eje"
                 name="od_eje"
+                required
+                class="mt-1 p-2 border rounded-md w-full"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700"
+                >Agudeza Visual (AV)</label
+              ><input
+                type="text"
+                [(ngModel)]="currentPrescription.od_av"
+                name="od_av"
+                placeholder="Ej: 20/20"
                 required
                 class="mt-1 p-2 border rounded-md w-full"
               />
@@ -258,7 +289,6 @@
         </fieldset>
       </div>
 
-      <!-- Sección Adicional -->
       <fieldset class="border rounded-md p-4 mt-6">
         <legend class="text-lg font-semibold text-gray-800 px-2">
           Valores Adicionales
@@ -267,8 +297,7 @@
           <div>
             <label class="block text-sm font-medium text-gray-700"
               >Adición</label
-            >
-            <input
+            ><input
               type="number"
               step="0.01"
               [(ngModel)]="currentPrescription.adicion"
@@ -280,8 +309,7 @@
           <div>
             <label class="block text-sm font-medium text-gray-700"
               >Distancia Pupilar (DP)</label
-            >
-            <input
+            ><input
               type="number"
               step="0.1"
               [(ngModel)]="currentPrescription.dp"
@@ -292,13 +320,10 @@
           </div>
         </div>
       </fieldset>
-
-      <!-- Observaciones -->
       <div class="mt-6">
         <label class="block text-sm font-medium text-gray-700"
           >Observaciones</label
-        >
-        <textarea
+        ><textarea
           [(ngModel)]="currentPrescription.observaciones"
           name="observaciones"
           class="mt-1 p-2 border rounded-md w-full"
@@ -312,9 +337,8 @@
           (click)="closeForm()"
           class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg mr-2"
         >
-          Cancelar
-        </button>
-        <button
+          Cancelar</button
+        ><button
           type="submit"
           [disabled]="!prescriptionForm.form.valid"
           class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg disabled:opacity-50"
@@ -326,7 +350,6 @@
   </div>
 </div>
 
-<!-- Modal para ver imagen (sin cambios) -->
 <div
   *ngIf="selectedImageUrl"
   (click)="closeImageModal()"
