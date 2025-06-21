@@ -1,16 +1,20 @@
-// src/app/app.routes.ts
-
 import { Routes } from '@angular/router';
 import { ClientListComponent } from './components/client-list/client-list.component';
 import { PrescriptionListComponent } from './components/prescription-list/prescription-list.component';
+import { LayoutComponent } from './components/layout/layout.component'; // <-- Importamos el Layout
 
 export const routes: Routes = [
-  // Redirige la ruta raíz a la lista de clientes por defecto
-  { path: '', redirectTo: '/clients', pathMatch: 'full' },
-
-  // Ruta para mostrar la lista de clientes y el CRUD
-  { path: 'clients', component: ClientListComponent },
-
-  // Ruta para mostrar las fórmulas de un cliente específico, usando su ID
-  { path: 'prescriptions/:clientId', component: PrescriptionListComponent },
+  // Ruta principal que usa el LayoutComponent
+  {
+    path: '',
+    component: LayoutComponent, // <-- El Layout ahora es el componente padre
+    children: [
+      { path: '', redirectTo: 'clients', pathMatch: 'full' }, // Redirige a /clients por defecto
+      { path: 'clients', component: ClientListComponent },
+      { path: 'prescriptions/:clientId', component: PrescriptionListComponent },
+      // ... futuras rutas que usarán el layout irían aquí
+    ],
+  },
+  // Redirigir cualquier otra ruta no encontrada a la página principal
+  { path: '**', redirectTo: '' },
 ];
