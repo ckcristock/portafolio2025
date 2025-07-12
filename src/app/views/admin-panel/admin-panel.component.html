@@ -1,1 +1,83 @@
-<p>admin-panel works!</p>
+<div class="container mt-4">
+  <h1 class="text-center mb-4">Panel de Administración de Datos</h1>
+
+  <div class="row">
+    <div class="col-12 col-md-6 mb-4">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Subir Equipos (XLS/CSV)</h5>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label for="teamsFile" class="form-label"
+              >Seleccionar archivo de Equipos:</label
+            >
+            <input
+              class="form-control"
+              type="file"
+              id="teamsFile"
+              (change)="onTeamsFileSelected($event)"
+              accept=".xls,.xlsx,.csv"
+            />
+          </div>
+          <button
+            class="btn btn-success"
+            (click)="uploadTeamsFile()"
+            [disabled]="!selectedTeamsFile"
+          >
+            Subir Equipos
+          </button>
+          <div *ngIf="teamsUploadMessage" class="mt-3">
+            <div
+              [ngClass]="{
+                'alert alert-success': !teamsUploadError,
+                'alert alert-danger': teamsUploadError
+              }"
+            >
+              {{ teamsUploadMessage }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 mb-4">
+      <div class="card shadow-sm">
+        <div class="card-header bg-success text-white">
+          <h5 class="mb-0">Subir Jugadores (XLS/CSV)</h5>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label for="playersFile" class="form-label"
+              >Seleccionar archivo de Jugadores:</label
+            >
+            <input
+              class="form-control"
+              type="file"
+              id="playersFile"
+              (change)="onPlayersFileSelected($event)"
+              accept=".xls,.xlsx,.csv"
+            />
+          </div>
+          <button
+            class="btn btn-primary"
+            (click)="uploadPlayersFile()"
+            [disabled]="!selectedPlayersFile"
+          >
+            Subir Jugadores
+          </button>
+          <div *ngIf="playersUploadMessage" class="mt-3">
+            <div
+              [ngClass]="{
+                'alert alert-success': !playersUploadError,
+                'alert alert-danger': playersUploadError
+              }"
+            >
+              {{ playersUploadMessage }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
