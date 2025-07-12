@@ -1,0 +1,11 @@
+/* src/app/shared/navbar/navbar.component.css */
+.navbar {
+  margin-bottom: 20px; /* Un poco de espacio debajo del navbar */
+}
+
+/* Estilo para el link activo si es necesario */
+.navbar-nav .nav-link.active {
+  font-weight: bold;
+  /* Puedes añadir un color diferente para el link activo */
+  /* color: #ffffff !important; */
+}
