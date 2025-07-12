@@ -8,25 +8,20 @@ import {
   ViewChild,
   ElementRef,
 } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Importa CommonModule para directivas como ngFor, ngIf
-import { MatTableModule } from '@angular/material/table'; // Importa MatTableModule
-import { MatButtonModule } from '@angular/material/button'; // Importa MatButtonModule
-import { RouterModule } from '@angular/router'; // Importa RouterModule si usas routerLink
+import { CommonModule } from '@angular/common';
+import { MatTableModule } from '@angular/material/table';
+import { MatButtonModule } from '@angular/material/button';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-table',
-  standalone: true, // ¡Aquí está el cambio clave!
-  imports: [
-    CommonModule, // Necesario para ngFor, ngIf, ngSwitch, etc.
-    MatTableModule,
-    MatButtonModule,
-    RouterModule, // Si usas routerLink en tu tabla
-  ],
+  standalone: true,
+  imports: [CommonModule, MatTableModule, MatButtonModule, RouterModule],
   templateUrl: './table.component.html',
-  styleUrls: ['./table.component.css'],
+  styleUrls: ['./table.component.scss'],
 })
 export class TableComponent implements OnInit {
-  // ... (el resto de tu código del componente es el mismo)
+  // --- Entradas (Inputs) ---
   @Input() tableTitle: string = '';
   @Input() data: any[] = [];
   @Input() columns: {
@@ -37,10 +32,30 @@ export class TableComponent implements OnInit {
   }[] = [];
   @Input() showUploadButton: boolean = false;
   @Input() uploadButtonText: string = 'Subir Archivo';
+
+  // NUEVAS ENTRADAS para filtros/estadísticas
+  @Input() showFilterSection: boolean = false; // Controla la visibilidad de la sección de filtros
+  @Input() filterSectionTitle: string = 'Filtros y Estadísticas'; // Título para la sección de filtros
+
+  // --- Salidas (Outputs) ---
   @Output() fileUpload = new EventEmitter<File>();
+  // Puedes añadir un Output para emitir los cambios de filtro si la lógica de filtro está dentro de esta tabla
+  // @Output() filterChanged = new EventEmitter<any>();
+
+  // Referencia al input de tipo 'file' en el template
   @ViewChild('fileInput') fileInput!: ElementRef;
 
+  // NUEVA PROPIEDAD para controlar el estado de colapso
+  isFilterSectionCollapsed: boolean = true; // Empieza colapsada por defecto
+
   ngOnInit(): void {}
+
+  /**
+   * Alterna el estado de colapso de la sección de filtros.
+   */
+  toggleFilterSection(): void {
+    this.isFilterSectionCollapsed = !this.isFilterSectionCollapsed;
+  }
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -53,6 +68,10 @@ export class TableComponent implements OnInit {
 
   triggerFileInput(): void {
     this.fileInput.nativeElement.click();
+  }
+
+  get columnKeys(): string[] {
+    return this.columns.map((col) => col.key);
   }
 
   getCellValue(item: any, col: any): any {

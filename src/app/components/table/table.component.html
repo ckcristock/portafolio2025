@@ -1,0 +1,66 @@
+<div class="table-container">
+  <h2>{{ tableTitle }}</h2>
+
+  <div *ngIf="showFilterSection" class="card mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">{{ filterSectionTitle }}</h5>
+      <button
+        class="btn btn-sm btn-outline-secondary"
+        (click)="toggleFilterSection()"
+        [attr.aria-expanded]="!isFilterSectionCollapsed"
+        aria-controls="collapseFilterSection"
+      >
+        {{ isFilterSectionCollapsed ? "Mostrar" : "Ocultar" }}
+      </button>
+    </div>
+    <div
+      id="collapseFilterSection"
+      [ngClass]="{
+        collapse: isFilterSectionCollapsed,
+        show: !isFilterSectionCollapsed
+      }"
+    >
+      <div class="card-body">
+        <ng-content></ng-content>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="showUploadButton" class="upload-section">
+    <button mat-raised-button color="primary" (click)="triggerFileInput()">
+      {{ uploadButtonText }}
+    </button>
+    <input
+      type="file"
+      #fileInput
+      style="display: none"
+      (change)="onFileSelected($event)"
+      accept=".xls,.xlsx,.csv"
+    />
+  </div>
+
+  <table mat-table [dataSource]="data" class="mat-elevation-z8">
+    <ng-container *ngFor="let col of columns" [matColumnDef]="col.key">
+      <th mat-header-cell *matHeaderCellDef>{{ col.header }}</th>
+      <td mat-cell *matCellDef="let element">
+        <ng-container [ngSwitch]="col.type">
+          <a *ngSwitchCase="'link'" [routerLink]="getLinkRoute(element, col)">
+            {{ getCellValue(element, col) }}
+          </a>
+          <span *ngSwitchDefault>
+            {{ getCellValue(element, col) }}
+          </span>
+        </ng-container>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnKeys"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnKeys"></tr>
+
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" [colSpan]="columns.length">
+        No hay datos para mostrar.
+      </td>
+    </tr>
+  </table>
+</div>
