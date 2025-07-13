@@ -1,0 +1,105 @@
+<h2 mat-dialog-title>Registrar Nuevo Partido</h2>
+
+<mat-dialog-content>
+  <form (ngSubmit)="onSubmit()">
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Equipo Local</mat-label>
+          <mat-select
+            [(ngModel)]="matchData.home_team_id"
+            name="home_team_id"
+            required
+          >
+            <mat-option [value]="null" disabled
+              >Selecciona un equipo</mat-option
+            >
+            <mat-option *ngFor="let team of allTeams" [value]="team.id">{{
+              team.name
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-md-6 mb-3">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Goles Local</mat-label>
+          <input
+            matInput
+            type="number"
+            [(ngModel)]="matchData.home_team_score"
+            name="home_team_score"
+            min="0"
+            required
+          />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Equipo Visitante</mat-label>
+          <mat-select
+            [(ngModel)]="matchData.away_team_id"
+            name="away_team_id"
+            required
+          >
+            <mat-option [value]="null" disabled
+              >Selecciona un equipo</mat-option
+            >
+            <mat-option *ngFor="let team of allTeams" [value]="team.id">{{
+              team.name
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-md-6 mb-3">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Goles Visitante</mat-label>
+          <input
+            matInput
+            type="number"
+            [(ngModel)]="matchData.away_team_score"
+            name="away_team_score"
+            min="0"
+            required
+          />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Ubicación</mat-label>
+          <input
+            matInput
+            type="text"
+            [(ngModel)]="matchData.location"
+            name="location"
+            required
+          />
+        </mat-form-field>
+      </div>
+      <div class="col-md-6 mb-3">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Fecha del Partido</mat-label>
+          <input
+            matInput
+            type="datetime-local"
+            [(ngModel)]="matchData.match_date"
+            name="match_date"
+            required
+          />
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()">
+    Registrar
+  </button>
+</mat-dialog-actions>
