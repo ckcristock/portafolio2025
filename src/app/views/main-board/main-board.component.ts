@@ -4,6 +4,12 @@ import { HttpClient, HttpClientModule } from '@angular/common/http'; // Para hac
 import { TableComponent } from '../../components/table/table.component'; // Importa tu componente de tabla reutilizable
 import { FormsModule } from '@angular/forms'; // Necesario para [(ngModel)] para los filtros
 
+// Importación de servicios
+import { TeamService } from '../../services/team.service'; // Asegúrate de que la ruta sea correcta
+import { PlayerService } from '../../services/player.service'; // ¡Importa PlayerService!
+import { PartidoService } from '../../services/partido.service'; // Asegúrate de que la ruta sea correcta
+import { CleanSheetService } from '../../services/clean-sheet.service'; // ¡Importa CleanSheetService!
+
 // Definición de la interfaz para el tipo de columna, para asegurar el tipado correcto
 interface TableColumn {
   key: string;
@@ -70,22 +76,123 @@ export class MainBoardComponent implements OnInit {
   minCleanSheetsFilter: number | null = null; // Filtro por vallas invictas mínimas
   goalkeeperTeamFilter: string = ''; // Filtro por equipo del portero
 
-  constructor(private http: HttpClient) {}
+  // --- Propiedades para el Registro de Partido ---
+  allTeams: any[] = []; // Lista de todos los equipos para los selectores
+  newMatch: any = {
+    // Objeto para almacenar los datos del nuevo partido a registrar
+    home_team_id: null,
+    away_team_id: null,
+    home_team_score: 0,
+    away_team_score: 0,
+    location: '',
+    match_date: this.getCurrentDateTimeLocal(), // Inicializa con la fecha y hora actual
+    status: 'finished', // Por defecto, se asume que el partido ya terminó al registrarlo
+  };
+  matchResultMessage: string = ''; // Mensaje de estado para el registro de partido
+  matchResultError: boolean = false; // Indica si hubo un error en el registro
+
+  constructor(
+    private http: HttpClient,
+    private teamService: TeamService,
+    private playerService: PlayerService, // ¡Inyecta PlayerService!
+    private partidoService: PartidoService,
+    private cleanSheetService: CleanSheetService // ¡Inyecta CleanSheetService!
+  ) {}
 
   ngOnInit(): void {
     // Al iniciar el componente, carga los datos para cada tabla
     this.fetchTeamsStandings();
     this.fetchTopScorers();
     this.fetchCleanSheets();
+    this.fetchAllTeams(); // Carga la lista de equipos para el formulario de partidos
   }
+
+  /**
+   * Obtiene la fecha y hora actual en formato local para el input datetime-local.
+   */
+  getCurrentDateTimeLocal(): string {
+    const now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset()); // Ajusta a la zona horaria local
+    return now.toISOString().slice(0, 16); // Formato YYYY-MM-DDTHH:MM
+  }
+
+  /**
+   * Obtiene todos los equipos desde TeamService para llenar los selectores del formulario de partido.
+   */
+  fetchAllTeams(): void {
+    this.teamService.getTeams().subscribe(
+      (data) => {
+        this.allTeams = data;
+      },
+      (error) => {
+        console.error('Error al cargar todos los equipos:', error);
+      }
+    );
+  }
+
+  /**
+   * Registra un nuevo partido utilizando PartidoService.
+   * Se llama al enviar el formulario del partido.
+   */
+  registerMatchResult(): void {
+    // Validación básica del formulario en el frontend
+    if (this.newMatch.home_team_id === this.newMatch.away_team_id) {
+      this.matchResultMessage =
+        'El equipo local y el visitante no pueden ser el mismo.';
+      this.matchResultError = true;
+      return;
+    }
+    if (
+      !this.newMatch.home_team_id ||
+      !this.newMatch.away_team_id ||
+      !this.newMatch.location ||
+      !this.newMatch.match_date
+    ) {
+      this.matchResultMessage =
+        'Por favor, completa todos los campos del partido.';
+      this.matchResultError = true;
+      return;
+    }
+
+    this.matchResultMessage = 'Registrando partido...';
+    this.matchResultError = false;
+
+    this.partidoService.createPartido(this.newMatch).subscribe(
+      (response) => {
+        this.matchResultMessage = 'Partido registrado exitosamente.';
+        this.matchResultError = false;
+        // Reiniciar el formulario después del registro exitoso
+        this.newMatch = {
+          home_team_id: null,
+          away_team_id: null,
+          home_team_score: 0,
+          away_team_score: 0,
+          location: '',
+          match_date: this.getCurrentDateTimeLocal(),
+          status: 'finished',
+        };
+        // Recargar todas las tablas para que reflejen los nuevos resultados
+        this.fetchTeamsStandings();
+        this.fetchTopScorers();
+        this.fetchCleanSheets();
+      },
+      (error) => {
+        console.error('Error al registrar el partido:', error);
+        this.matchResultMessage =
+          error.error.message || 'Error desconocido al registrar el partido.';
+        this.matchResultError = true;
+      }
+    );
+  }
+
+  // --- Métodos de carga de datos para las tablas (existentes, con correcciones) ---
 
   /**
    * Obtiene los datos de la tabla de posiciones de equipos desde el backend.
    */
   fetchTeamsStandings(): void {
-    this.http.get<any[]>('/api/teams/standings').subscribe(
+    this.teamService.getStandings().subscribe(
       (data) => {
-        // Mapea los datos para añadir la columna 'position' (posición) basándose en el orden recibido del backend
         this.originalTeamsStandingsData = data.map((team, index) => ({
           ...team,
           position: index + 1,
@@ -102,7 +209,8 @@ export class MainBoardComponent implements OnInit {
    * Obtiene los datos de los máximos goleadores desde el backend.
    */
   fetchTopScorers(): void {
-    this.http.get<any[]>('/api/players/top-scorers').subscribe(
+    // ¡CORREGIDO! Ahora llama a playerService.getTopScorers()
+    this.playerService.getTopScorers().subscribe(
       (data) => {
         this.originalTopScorersData = data; // Almacena los datos originales
         this.applyTopScorersFilter(); // Aplica cualquier filtro existente
@@ -117,7 +225,8 @@ export class MainBoardComponent implements OnInit {
    * Obtiene los datos de la valla menos vencida desde el backend.
    */
   fetchCleanSheets(): void {
-    this.http.get<any[]>('/api/clean-sheets').subscribe(
+    // ¡CORREGIDO! Ahora llama a cleanSheetService.getCleanSheets()
+    this.cleanSheetService.getCleanSheets().subscribe(
       (data) => {
         this.originalCleanSheetsData = data; // Almacena los datos originales
         this.applyCleanSheetsFilter(); // Aplica cualquier filtro existente
@@ -154,7 +263,7 @@ export class MainBoardComponent implements OnInit {
     );
   }
 
-  // --- Métodos de Filtrado para cada Tabla ---
+  // --- Métodos de Filtrado para cada Tabla (existentes) ---
 
   /**
    * Aplica filtros a la tabla de posiciones de Equipos.
@@ -231,7 +340,7 @@ export class MainBoardComponent implements OnInit {
     this.cleanSheetsData = filteredData; // Actualiza los datos visibles en la tabla
   }
 
-  // --- Métodos para Estadísticas Generales de Equipos (ya estaban) ---
+  // --- Métodos para Estadísticas Generales de Equipos (existentes) ---
 
   /**
    * Calcula el promedio de puntos de los equipos.

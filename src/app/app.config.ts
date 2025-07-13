@@ -1,68 +1,24 @@
-// src/app/interceptors/api.interceptor.ts
-import {
-  HttpRequest,
-  HttpHandlerFn, // ¡Cambiado a HttpHandlerFn!
-  HttpEvent,
-  HttpInterceptorFn, // ¡Cambiado a HttpInterceptorFn!
-  HttpResponse,
-  HttpErrorResponse,
-} from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError, finalize, tap } from 'rxjs/operators';
+// src/app/app.config.ts
+import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { provideRouter } from '@angular/router';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
-// Contador de peticiones activas (fuera de la función para mantener el estado)
-let activeRequests = 0;
+import { routes } from './app.routes'; // Asumiendo que tus rutas están en app.routes.ts o routes.ts
+import { ApiInterceptor } from './interceptors/api.interceptor'; // ¡Importa tu interceptor!
 
-// Exportamos una constante que es la función interceptora
-export const ApiInterceptor: HttpInterceptorFn = (
-  req: HttpRequest<unknown>,
-  next: HttpHandlerFn
-): Observable<HttpEvent<unknown>> => {
-  // Aquí la lógica del interceptor, ¡es la misma que antes pero dentro de la función!
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // Proporciona la detección de cambios de Zone.js
+    provideZoneChangeDetection({ eventCoalescing: true }),
 
-  // Incrementa el contador de peticiones activas
-  activeRequests++;
-  console.log('Petición HTTP iniciada:', req.url);
+    // Proporciona el enrutador de Angular con tus rutas definidas
+    provideRouter(routes),
 
-  return next(req).pipe(
-    tap((event: HttpEvent<unknown>) => {
-      if (event instanceof HttpResponse) {
-        console.log('Respuesta HTTP exitosa:', event.url, event.status);
-      }
-    }),
-    catchError((error: HttpErrorResponse) => {
-      console.error('Error HTTP:', error.url, error.status, error.message);
-      let errorMessage = 'Ocurrió un error desconocido.';
-
-      if (error.error instanceof ErrorEvent) {
-        errorMessage = `Error: ${error.error.message}`;
-      } else {
-        switch (error.status) {
-          case 400:
-            errorMessage =
-              'Solicitud incorrecta. Verifique los datos enviados.';
-            break;
-          case 404:
-            errorMessage = 'Recurso no encontrado.';
-            break;
-          case 500:
-            errorMessage =
-              'Error interno del servidor. Inténtelo de nuevo más tarde.';
-            break;
-          default:
-            errorMessage = `Error del servidor: ${error.status} - ${error.message}`;
-        }
-      }
-
-      alert(`Error en la API: ${errorMessage}`);
-
-      return throwError(() => new Error(errorMessage));
-    }),
-    finalize(() => {
-      activeRequests--;
-      if (activeRequests === 0) {
-        console.log('Todas las peticiones HTTP finalizadas.');
-      }
-    })
-  );
+    // Proporciona HttpClient y configura los interceptores
+    provideHttpClient(
+      withInterceptors([
+        ApiInterceptor, // Registra tu ApiInterceptor aquí.
+      ])
+    ),
+  ],
 };
