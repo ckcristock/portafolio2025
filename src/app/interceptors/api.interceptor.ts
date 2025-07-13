@@ -1,4 +1,3 @@
-// src/app/interceptors/api.interceptor.ts
 import {
   HttpRequest,
   HttpHandlerFn,
@@ -10,20 +9,16 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
 
-// Contador de peticiones activas (fuera de la función para mantener el estado)
 let activeRequests = 0;
 
-// Exportamos una constante que es la función interceptora
 export const ApiInterceptor: HttpInterceptorFn = (
   req: HttpRequest<unknown>,
   next: HttpHandlerFn
 ): Observable<HttpEvent<unknown>> => {
-  // Incrementa el contador de peticiones activas
   activeRequests++;
   console.log('Petición HTTP iniciada:', req.url);
 
   return next(req).pipe(
-    // Corregido: antes tenías next.handle(req), ahora solo next(req)
     tap((event: HttpEvent<unknown>) => {
       if (event instanceof HttpResponse) {
         console.log('Respuesta HTTP exitosa:', event.url, event.status);

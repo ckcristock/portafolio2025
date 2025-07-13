@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Proporciona directivas comunes como *ngIf, *ngFor
-import { HttpClient, HttpClientModule } from '@angular/common/http'; // Para hacer peticiones HTTP
-import { TableComponent } from '../../components/table/table.component'; // Importa tu componente de tabla reutilizable
-import { FormsModule } from '@angular/forms'; // Necesario para [(ngModel)] para los filtros
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { TableComponent } from '../../components/table/table.component'; // La ruta puede ser 'src/app/table/table.component' o '../../components/table/table.component'
+import { FormsModule } from '@angular/forms';
 
 // Importaciones de Angular Material para el diálogo
-import { MatDialog, MatDialogModule } from '@angular/material/dialog'; // Importa MatDialog y MatDialogModule
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 // Importación de servicios
-import { TeamService } from '../../services/team.service'; // Asegúrate de que la ruta sea correcta
-import { PlayerService } from '../../services/player.service'; // Asegúrate de que la ruta sea correcta
+import { TeamService } from '../../services/team.service';
+import { PlayerService } from '../../services/player.service';
 import { PartidoService } from '../../services/partido.service';
 import { CleanSheetService } from '../../services/clean-sheet.service';
+// ELIMINADO: import { WebsocketService } from '../services/websocket.service';
 
 // Importa el componente del modal
 import { MatchRegisterModalComponent } from '../../shared/modals/match-register-modal/match-register-modal.component';
@@ -26,18 +27,20 @@ interface TableColumn {
 
 @Component({
   selector: 'app-main-board',
-  standalone: true, // ¡Este componente es standalone!
+  standalone: true,
   imports: [
     CommonModule,
     HttpClientModule,
     TableComponent,
     FormsModule,
-    MatDialogModule, // ¡Añade MatDialogModule aquí para poder usar MatDialog!
+    MatDialogModule,
   ],
   templateUrl: './main-board.component.html',
   styleUrls: ['./main-board.component.scss'],
 })
-export class MainBoardComponent implements OnInit {
+export class MainBoardComponent implements OnInit, OnDestroy {
+  // Mantenemos OnDestroy por buena práctica, aunque no hay suscripciones activas aquí ahora.
+
   // --- Propiedades para la Tabla de Equipos (Posiciones) ---
   originalTeamsStandingsData: any[] = [];
   teamsStandingsData: any[] = [];
@@ -80,28 +83,33 @@ export class MainBoardComponent implements OnInit {
   minCleanSheetsFilter: number | null = null;
   goalkeeperTeamFilter: string = '';
 
-  // --- Propiedades para el Registro de Partido (solo 'allTeams' se mantiene aquí) ---
-  allTeams: any[] = []; // Se usará para pasar al modal
-
-  // newMatch, matchResultMessage, matchResultError se mueven al modal
+  // --- Propiedades para el Registro de Partido ---
+  allTeams: any[] = [];
 
   constructor(
-    private http: HttpClient, // Lo dejamos por si lo necesitas para cosas específicas
+    private http: HttpClient, // Lo mantenemos por si hay subidas de archivos directas (Admin Panel)
     private teamService: TeamService,
     private playerService: PlayerService,
     private partidoService: PartidoService,
     private cleanSheetService: CleanSheetService,
-    private dialog: MatDialog // ¡Inyecta MatDialog!
+    private dialog: MatDialog // ELIMINADO: private websocketService: WebsocketService
   ) {}
 
   ngOnInit(): void {
     this.fetchTeamsStandings();
     this.fetchTopScorers();
     this.fetchCleanSheets();
-    this.fetchAllTeams(); // Carga la lista de equipos para el formulario de partidos
+    this.fetchAllTeams();
+    // ELIMINADO: this.subscribeToRealtimeUpdates();
   }
 
-  // Se mantiene para el formulario de registro de partido
+  ngOnDestroy(): void {
+    // ELIMINADO: No hay suscripciones de WebSocket que desuscribir aquí.
+    // Si tuvieras otras suscripciones (ej. de RxJS temporizadores), las desuscribirías aquí.
+  }
+
+  // ELIMINADO: private subscribeToRealtimeUpdates(): void { /* ... */ }
+
   fetchAllTeams(): void {
     this.teamService.getTeams().subscribe(
       (data) => {
@@ -113,24 +121,20 @@ export class MainBoardComponent implements OnInit {
     );
   }
 
-  /**
-   * Abre el modal para registrar un nuevo partido.
-   * Reemplaza el método registerMatchResult anterior.
-   */
   openMatchRegisterModal(): void {
     const dialogRef = this.dialog.open(MatchRegisterModalComponent, {
-      width: '700px', // Ancho del modal, ajusta según necesidad
-      data: { teams: this.allTeams }, // Pasamos la lista de equipos al modal
+      width: '700px',
+      data: { teams: this.allTeams },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      // 'result' contendrá los datos del partido si el usuario hizo clic en "Registrar"
       if (result) {
         console.log('Partido registrado desde modal:', result);
         this.partidoService.createPartido(result).subscribe(
           (res) => {
             alert('Partido registrado exitosamente!');
-            // Recargar todas las tablas para que reflejen los nuevos resultados
+            // ¡MANTENEMOS ESTAS LLAMADAS PARA RECARGAR LAS TABLAS!
+            // Esto reemplaza la función de WebSockets de notificar el cambio.
             this.fetchTeamsStandings();
             this.fetchTopScorers();
             this.fetchCleanSheets();
@@ -148,8 +152,6 @@ export class MainBoardComponent implements OnInit {
       }
     });
   }
-
-  // --- Métodos de carga de datos para las tablas (existentes) ---
 
   /**
    * Obtiene los datos de la tabla de posiciones de equipos desde el backend.
@@ -201,6 +203,7 @@ export class MainBoardComponent implements OnInit {
 
   /**
    * Maneja la subida de un archivo (XLS/CSV) para la tabla de Equipos.
+   * Este método aún se usará en el AdminPanelComponent.
    * @param file El archivo File seleccionado por el usuario.
    */
   onTeamFileUpload(file: File): void {
@@ -208,22 +211,25 @@ export class MainBoardComponent implements OnInit {
     const formData = new FormData();
     formData.append('file', file);
 
-    this.http.post('/api/teams/upload', formData).subscribe(
-      (response) => {
-        console.log('Subida de equipos exitosa:', response);
-        alert('Equipos importados correctamente!');
-        this.fetchTeamsStandings();
-      },
-      (error) => {
-        console.error('Error al subir equipos:', error);
-        alert(
-          'Error al importar equipos: ' + (error.error.error || 'Desconocido')
-        );
-      }
-    );
+    // Usa http directamente aquí, o podrías crear un FileUploadService
+    this.http
+      .post('http://localhost:8000/api/teams/upload', formData)
+      .subscribe(
+        (response) => {
+          console.log('Subida de equipos exitosa:', response);
+          alert('Equipos importados correctamente!');
+          this.fetchTeamsStandings(); // Recarga la tabla de posiciones
+        },
+        (error) => {
+          console.error('Error al subir equipos:', error);
+          alert(
+            'Error al importar equipos: ' + (error.error.error || 'Desconocido')
+          );
+        }
+      );
   }
 
-  // --- Métodos de Filtrado para cada Tabla (existentes) ---
+  // --- Métodos de Filtrado para cada Tabla (sin cambios) ---
 
   /**
    * Aplica filtros a la tabla de posiciones de Equipos.
@@ -289,7 +295,7 @@ export class MainBoardComponent implements OnInit {
     this.cleanSheetsData = filteredData;
   }
 
-  // --- Métodos para Estadísticas Generales de Equipos (existentes) ---
+  // --- Métodos para Estadísticas Generales de Equipos (sin cambios) ---
 
   /**
    * Calcula el promedio de puntos de los equipos.
