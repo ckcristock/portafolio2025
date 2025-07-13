@@ -3,13 +3,21 @@
 
   <div class="row mb-4">
     <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Equipos</h2>
+        <button
+          class="btn btn-primary btn-sm"
+          (click)="openMatchRegisterModal()"
+        >
+          Registrar Partido
+        </button>
+      </div>
+
       <app-table
-        [tableTitle]="'Equipos'"
+        [tableTitle]="''"
         [data]="teamsStandingsData"
         [columns]="teamsStandingsColumns"
-        [showUploadButton]="true"
-        [uploadButtonText]="'Subir Equipos (XLS/CSV)'"
-        (fileUpload)="onTeamFileUpload($event)"
+        [showUploadButton]="false"
         [showFilterSection]="true"
         [filterSectionTitle]="'Estadísticas y Filtros de Equipos'"
       >
@@ -41,18 +49,6 @@
           </div>
         </div>
       </app-table>
-
-      <div class="card mt-4 shadow-sm">
-        <div class="card-header bg-secondary text-white">
-          <h5 class="mb-0">Registrar Resultado de Partido</h5>
-        </div>
-        <div class="card-body">
-          <p>Haz clic para registrar el resultado de un nuevo partido.</p>
-          <button class="btn btn-primary" (click)="openMatchRegisterModal()">
-            Abrir Formulario de Partido
-          </button>
-        </div>
-      </div>
     </div>
   </div>
 
