@@ -81,8 +81,8 @@
     </div>
   </div>
 
-  <div class="row mt-4">
-    <div class="col-12">
+  <div class="row">
+    <div class="col-12 col-md-6 mb-4">
       <div class="card shadow-sm">
         <div
           class="card-header bg-info text-white d-flex justify-content-between align-items-center"
@@ -103,9 +103,8 @@
         </div>
       </div>
     </div>
-  </div>
-  <div class="row mt-4">
-    <div class="col-12">
+
+    <div class="col-12 col-md-6 mb-4">
       <div class="card shadow-sm">
         <div
           class="card-header bg-secondary text-white d-flex justify-content-between align-items-center"
@@ -124,6 +123,33 @@
             [data]="playersData"
             [columns]="playerColumns"
             (actionClick)="onPlayerTableAction($event)"
+          >
+          </app-table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12 mb-4">
+      <div class="card shadow-sm">
+        <div
+          class="card-header bg-danger text-white d-flex justify-content-between align-items-center"
+        >
+          <h5 class="mb-0">Gestión de Partidos</h5>
+          <button
+            class="btn btn-warning btn-sm"
+            (click)="openPartidoFormModal()"
+          >
+            <i class="fas fa-futbol"></i> Añadir Partido
+          </button>
+        </div>
+        <div class="card-body">
+          <app-table
+            [tableTitle]="''"
+            [data]="partidosData"
+            [columns]="partidoColumns"
+            (actionClick)="onPartidoTableAction($event)"
           >
           </app-table>
         </div>

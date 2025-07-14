@@ -1,16 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { CommonModule } from '@angular/common'; // Necesario para directivas como *ngIf
+import { HttpClient, HttpClientModule } from '@angular/common/http'; // Para hacer peticiones HTTP
+import { FormsModule } from '@angular/forms'; // Necesario para el binding de formularios
+import { MatDialog, MatDialogModule } from '@angular/material/dialog'; // Para usar MatDialog
 
-import { FileUploadService } from '../../services/file-upload.service';
+import { FileUploadService } from '../../services/file-upload.service'; // Servicio para subida de archivos
 import { TeamService } from '../../services/team.service'; // Servicio para CRUD de equipos
-import { PlayerService } from '../../services/player.service'; // ¡Importar PlayerService!
+import { PlayerService } from '../../services/player.service'; // Servicio para CRUD de jugadores
+import { PartidoService } from '../../services/partido.service'; // ¡NUEVO! Servicio para CRUD de partidos
 
 // Modales de formulario
 import { TeamFormModalComponent } from '../../shared/modals/team-form-modal/team-form-modal.component';
-import { PlayerFormModalComponent } from '../../shared/modals/player-form-modal/player-form-modal.component'; // ¡Importar PlayerFormModalComponent!
+import { PlayerFormModalComponent } from '../../shared/modals/player-form-modal/player-form-modal.component';
+import { PartidoFormModalComponent } from '../../shared/modals/partido-form-modal/partido-form-modal.component'; // ¡NUEVO! Importar PartidoFormModalComponent
 
 import { TableComponent } from '../../components/table/table.component'; // Importar app-table
 
@@ -75,16 +77,14 @@ export class AdminPanelComponent implements OnInit {
   ];
   // --------------------------------------------------
 
-  // --- NUEVAS PROPIEDADES PARA GESTIÓN DE JUGADORES (CRUD) ---
-  playersData: any[] = []; // Array que contendrá los datos de los jugadores para la tabla
+  // --- PROPIEDADES PARA GESTIÓN DE JUGADORES (CRUD) ---
+  playersData: any[] = [];
   playerColumns: TableColumn[] = [
-    // Definición de las columnas para la tabla de gestión de jugadores
     { key: 'id', header: 'ID', type: 'number' },
     { key: 'name', header: 'Nombre', type: 'text' },
     { key: 'position', header: 'Posición', type: 'text' },
     { key: 'team_name', header: 'Equipo', type: 'text' }, // Asumo que el backend enviará team_name
     { key: 'birth_date', header: 'Fecha Nac.', type: 'date' },
-    // Columna para acciones:
     {
       key: 'actions',
       header: 'Acciones',
@@ -105,21 +105,55 @@ export class AdminPanelComponent implements OnInit {
       ],
     },
   ];
-  allTeams: any[] = []; // Necesaria para el selector de equipo en el PlayerFormModal
+  allTeams: any[] = []; // Necesaria para el selector de equipo en el PlayerFormModal y PartidoFormModal
+  // --------------------------------------------------
+
+  // --- NUEVAS PROPIEDADES PARA GESTIÓN DE PARTIDOS (CRUD) ---
+  partidosData: any[] = [];
+  partidoColumns: TableColumn[] = [
+    { key: 'id', header: 'ID', type: 'number' },
+    { key: 'home_team_name', header: 'Local', type: 'text' }, // Asumo que el backend enviará home_team_name
+    { key: 'away_team_name', header: 'Visitante', type: 'text' }, // Asumo que el backend enviará away_team_name
+    { key: 'score', header: 'Resultado', type: 'text' }, // Combinación de scores (ej: 2-1)
+    { key: 'match_date', header: 'Fecha', type: 'date' },
+    { key: 'location', header: 'Ubicación', type: 'text' },
+    { key: 'status', header: 'Estado', type: 'text' },
+    {
+      key: 'actions',
+      header: 'Acciones',
+      type: 'actions',
+      actions: [
+        {
+          icon: 'fas fa-edit',
+          tooltip: 'Editar Partido',
+          color: 'primary',
+          event: 'edit',
+        },
+        {
+          icon: 'fas fa-trash',
+          tooltip: 'Eliminar Partido',
+          color: 'warn',
+          event: 'delete',
+        },
+      ],
+    },
+  ];
   // --------------------------------------------------
 
   constructor(
     private http: HttpClient,
     private fileUploadService: FileUploadService,
     private teamService: TeamService,
-    private playerService: PlayerService, // ¡Inyectar PlayerService!
+    private playerService: PlayerService,
+    private partidoService: PartidoService, // ¡Inyectar PartidoService!
     private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
-    this.fetchTeams(); // Cargar la lista de equipos para el CRUD de Equipos
-    this.fetchPlayers(); // ¡NUEVO! Cargar la lista de jugadores para el CRUD de Jugadores
-    this.fetchAllTeamsForSelects(); // Cargar todos los equipos para los selects de modales
+    this.fetchTeams();
+    this.fetchPlayers();
+    this.fetchAllTeamsForSelects(); // Cargar todos los equipos para los selects de modales (jugadores y partidos)
+    this.fetchPartidos(); // ¡NUEVO! Cargar la lista de partidos para el CRUD de Partidos
   }
 
   // --- MÉTODOS PARA GESTIÓN DE EQUIPOS (CRUD) ---
@@ -217,17 +251,12 @@ export class AdminPanelComponent implements OnInit {
     }
   }
 
-  // --- NUEVOS MÉTODOS PARA GESTIÓN DE JUGADORES (CRUD) ---
+  // --- MÉTODOS PARA GESTIÓN DE JUGADORES (CRUD) ---
 
-  /**
-   * Obtiene la lista de jugadores desde el backend para la tabla de gestión.
-   * Carga la relación 'team' para mostrar el nombre del equipo.
-   */
   fetchPlayers(): void {
     this.playerService.getPlayers().subscribe(
       // Asumo que getPlayers ya trae la relación 'team'
       (data) => {
-        // Mapear para añadir team_name directamente al jugador para la tabla
         this.playersData = data.map((player) => ({
           ...player,
           team_name: player.team ? player.team.name : 'N/A', // Añade el nombre del equipo
@@ -242,32 +271,33 @@ export class AdminPanelComponent implements OnInit {
     );
   }
 
-  /**
-   * Obtiene todos los equipos para usar en los selectores de los formularios de jugadores/partidos.
-   */
   fetchAllTeamsForSelects(): void {
+    // Carga todos los equipos CON jugadores para los selectores de los modales (jugadores y partidos)
     this.teamService.getTeams().subscribe(
+      // Asumo que getTeams trae la relación 'players' con ?withPlayers=true
       (data) => {
-        this.allTeams = data;
+        this.allTeams = data; // allTeams ahora tendrá los equipos con su array 'players'
       },
       (error) => {
         console.error('Error al cargar equipos para selectores:', error);
+        // Fallback si la carga con jugadores falla, para al menos tener los equipos básicos
+        this.teamService.getTeams().subscribe((teams) => {
+          this.allTeams = teams;
+          console.warn(
+            'Equipos cargados para selectores sin jugadores. Esto afectará el modal de partidos.'
+          );
+        });
       }
     );
   }
 
-  /**
-   * Maneja las acciones de los botones dentro de la tabla de jugadores.
-   * Se activa por el Output `(actionClick)` del componente `app-table`.
-   * @param event Objeto que contiene la acción ('edit' o 'delete') y el elemento (jugador) afectado.
-   */
   onPlayerTableAction(event: { action: string; element: any }): void {
     switch (event.action) {
       case 'edit':
-        this.openPlayerFormModal(event.element); // Abre modal en modo edición
+        this.openPlayerFormModal(event.element);
         break;
       case 'delete':
-        this.deletePlayer(event.element.id); // Llama al método de eliminación
+        this.deletePlayer(event.element.id);
         break;
       default:
         console.warn(
@@ -277,20 +307,15 @@ export class AdminPanelComponent implements OnInit {
     }
   }
 
-  /**
-   * Abre el modal para crear o editar un jugador.
-   * @param player Objeto de jugador a editar (opcional). Si no se proporciona, es modo creación.
-   */
   openPlayerFormModal(player?: any): void {
     const dialogRef = this.dialog.open(PlayerFormModalComponent, {
-      width: '450px', // Ancho del modal de formulario de jugador
+      width: '450px',
       data: { player: player, teams: this.allTeams }, // Pasa el jugador y la lista de equipos
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         if (result.id) {
-          // Si el resultado tiene un ID, es una actualización
           this.playerService.updatePlayer(result.id, result).subscribe(
             (res) => {
               alert('Jugador actualizado correctamente.');
@@ -305,7 +330,6 @@ export class AdminPanelComponent implements OnInit {
             }
           );
         } else {
-          // Si no tiene ID, es una creación
           this.playerService.createPlayer(result).subscribe(
             (res) => {
               alert('Jugador creado correctamente.');
@@ -324,10 +348,6 @@ export class AdminPanelComponent implements OnInit {
     });
   }
 
-  /**
-   * Elimina un jugador de la base de datos.
-   * @param playerId El ID del jugador a eliminar.
-   */
   deletePlayer(playerId: number): void {
     if (
       confirm(
@@ -343,6 +363,109 @@ export class AdminPanelComponent implements OnInit {
           console.error('Error al eliminar jugador:', error);
           alert(
             'Error al eliminar jugador: ' +
+              (error.error?.message || 'Desconocido')
+          );
+        }
+      );
+    }
+  }
+
+  // --- NUEVOS MÉTODOS PARA GESTIÓN DE PARTIDOS (CRUD) ---
+
+  fetchPartidos(): void {
+    this.partidoService.getPartidos().subscribe(
+      (data) => {
+        // Mapear para añadir home_team_name, away_team_name y el score combinado
+        this.partidosData = data.map((partido) => ({
+          ...partido,
+          home_team_name: partido.homeTeam ? partido.homeTeam.name : 'N/A',
+          away_team_name: partido.awayTeam ? partido.awayTeam.name : 'N/A',
+          score: `${partido.home_team_score} - ${partido.away_team_score}`,
+        }));
+      },
+      (error) => {
+        console.error(
+          'Error al cargar partidos para el panel de administración:',
+          error
+        );
+      }
+    );
+  }
+
+  onPartidoTableAction(event: { action: string; element: any }): void {
+    switch (event.action) {
+      case 'edit':
+        this.openPartidoFormModal(event.element);
+        break;
+      case 'delete':
+        this.deletePartido(event.element.id);
+        break;
+      default:
+        console.warn(
+          'Acción desconocida en la tabla de partidos:',
+          event.action
+        );
+    }
+  }
+
+  openPartidoFormModal(partido?: any): void {
+    const dialogRef = this.dialog.open(PartidoFormModalComponent, {
+      width: '750px', // Ancho ajustado para el formulario de partido
+      data: { partido: partido, teams: this.allTeams }, // Pasa el partido y la lista de equipos con jugadores
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        if (result.id) {
+          // Actualizar
+          this.partidoService.updatePartido(result.id, result).subscribe(
+            (res) => {
+              alert('Partido actualizado correctamente.');
+              this.fetchPartidos();
+            },
+            (err) => {
+              console.error('Error al actualizar partido:', err);
+              alert(
+                'Error al actualizar partido: ' +
+                  (err.error?.message || 'Desconocido')
+              );
+            }
+          );
+        } else {
+          // Crear
+          this.partidoService.createPartido(result).subscribe(
+            (res) => {
+              alert('Partido creado correctamente.');
+              this.fetchPartidos();
+            },
+            (err) => {
+              console.error('Error al crear partido:', err);
+              alert(
+                'Error al crear partido: ' +
+                  (err.error?.message || 'Desconocido')
+              );
+            }
+          );
+        }
+      }
+    });
+  }
+
+  deletePartido(partidoId: number): void {
+    if (
+      confirm(
+        '¿Estás seguro de que quieres eliminar este partido? Esta acción es irreversible.'
+      )
+    ) {
+      this.partidoService.deletePartido(partidoId).subscribe(
+        () => {
+          alert('Partido eliminado correctamente.');
+          this.fetchPartidos();
+        },
+        (error) => {
+          console.error('Error al eliminar partido:', error);
+          alert(
+            'Error al eliminar partido: ' +
               (error.error?.message || 'Desconocido')
           );
         }
@@ -416,7 +539,7 @@ export class AdminPanelComponent implements OnInit {
             response.message || 'Jugadores subidos correctamente.';
           this.playersUploadError = false;
           this.selectedPlayersFile = null;
-          this.fetchPlayers(); // ¡Recargar la tabla de jugadores después de la subida masiva!
+          this.fetchPlayers(); // Recargar la tabla de jugadores después de la subida masiva
         },
         (error) => {
           console.error('Error al subir jugadores:', error);
