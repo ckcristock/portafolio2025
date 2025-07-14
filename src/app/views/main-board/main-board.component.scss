@@ -1,0 +1,73 @@
+/* src/app/main-board/main-board.component.scss */
+.container {
+  background-color: rgba(0, 0, 0, 0.75); /* Fondo oscuro semitransparente */
+  border-radius: 10px;
+  padding: 30px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Sombra sutil */
+  color: #f5f5f5; /* Texto claro */
+}
+
+h1 {
+  color: #e0e0e0; /* Un poco más claro para el título principal */
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.2); /* Sombra de texto suave */
+}
+
+// Estilos para la nueva sección de "Registrar Partido"
+.card {
+  background-color: rgba(
+    25,
+    25,
+    25,
+    0.8
+  ); /* Fondo oscuro semitransparente para la tarjeta */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #f5f5f5;
+
+  .card-header {
+    background-color: rgba(
+      50,
+      50,
+      50,
+      0.9
+    ) !important; /* Más opaco para el encabezado de la tarjeta */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    color: #e0e0e0 !important;
+  }
+}
+
+// Asegurar que el texto dentro de alerts sea legible
+.alert {
+  color: #e0e0e0;
+  background-color: rgba(40, 40, 40, 0.8);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+.alert-info {
+  background-color: rgba(23, 162, 184, 0.6);
+  border-color: rgba(23, 162, 184, 0.8);
+}
+.alert-success {
+  background-color: rgba(40, 167, 69, 0.6);
+  border-color: rgba(40, 167, 69, 0.8);
+}
+.alert-warning {
+  background-color: rgba(255, 193, 7, 0.6);
+  border-color: rgba(255, 193, 7, 0.8);
+}
+
+// Estilos para labels e inputs dentro de los filtros
+label.form-label {
+  color: #e0e0e0;
+}
+
+input.form-control,
+select.form-select {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #f5f5f5;
+}
+
+input.form-control::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}

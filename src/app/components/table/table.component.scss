@@ -1,0 +1,93 @@
+/* src/app/table/table.component.css */
+.table-container {
+  margin: 0; /* Remover margen exterior, ya que el contenedor principal lo maneja */
+  padding: 0; /* Remover padding, los estilos irán directamente a la tabla */
+  border: none; /* Remover borde si lo había */
+  background-color: transparent; /* Fondo transparente para que se vea la sombra de la tabla material */
+}
+
+h2 {
+  color: #e0e0e0; /* Color de título consistente */
+  margin-bottom: 15px;
+  font-size: 1.8rem;
+}
+
+.upload-section {
+  margin-bottom: 15px;
+  text-align: right;
+}
+
+table.mat-table {
+  width: 100%;
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.7
+  ); /* Fondo oscuro semitransparente para toda la tabla */
+  border-radius: 8px;
+  overflow: hidden; /* Asegura que los bordes redondeados se apliquen bien */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4); /* Sombra para la tabla */
+  color: #f5f5f5; /* Color de texto predeterminado para las celdas */
+}
+
+th.mat-header-cell {
+  background: linear-gradient(
+    to bottom,
+    rgba(50, 50, 50, 0.9),
+    rgba(30, 30, 30, 0.9)
+  ); /* Gradiente oscuro para encabezados */
+  font-weight: bold;
+  color: #e0e0e0; /* Texto claro para encabezados */
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1); /* Separador sutil */
+}
+
+td.mat-cell {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* Líneas de división de fila muy sutiles */
+  color: #f5f5f5; /* Color de texto para celdas */
+  font-size: 0.95rem;
+}
+
+/* Estilos para filas impares/pares para mejor legibilidad */
+tr.mat-row:nth-child(even) {
+  background-color: rgba(20, 20, 20, 0.7); /* Ligeramente más oscuro */
+}
+tr.mat-row:nth-child(odd) {
+  background-color: rgba(30, 30, 30, 0.7); /* Ligeramente más claro */
+}
+
+/* Estilo para las filas cuando no hay datos */
+tr.mat-no-data-row {
+  background-color: rgba(50, 50, 50, 0.8);
+  color: #ccc;
+  font-style: italic;
+}
+
+a {
+  color: #87ceeb; /* Un azul claro que contraste, similar a los tonos de la imagen */
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #b0e0e6;
+}
+
+/* Estilos específicos para la sección de filtros dentro del componente de tabla */
+.card-header,
+.card-body {
+  background-color: rgba(25, 25, 25, 0.8);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #f5f5f5;
+}
+.btn-outline-secondary {
+  color: #e0e0e0;
+  border-color: #e0e0e0;
+}
+.btn-outline-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}

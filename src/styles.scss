@@ -1,19 +1,42 @@
-
 // Custom Theming for Angular Material
 // For more information: https://material.angular.dev/guide/theming
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 
+// Importar Bootstrap (asegúrate de haberlo instalado con npm install bootstrap)
+// @import "~bootstrap/scss/bootstrap"; // <-- ¡AÑADIR ESTA LÍNEA!
+@import "../node_modules/bootstrap/scss/bootstrap";
+/* Puedes añadir estilos globales a este archivo, y también importar otros archivos de estilo */
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  overflow-x: hidden; // Previene el scroll horizontal no deseado
+
+  // Fondo de estadio global para la aplicación
+  background-image: url("/assets/stadium-background.jpg"); // <-- ¡Necesitarás esta imagen!
+  background-size: cover; // Cubre todo el área
+  background-position: center center; // Centra la imagen
+  background-repeat: no-repeat; // No repetir la imagen
+  background-attachment: fixed; // Fija el fondo mientras el contenido se desplaza
+  color: #f5f5f5; // Color de texto claro por defecto para el cuerpo
+}
+
+/* Aplicar tema de Material */
 html {
-  @include mat.theme((
-    color: (
-      theme-type: light,
-      primary: mat.$azure-palette,
-      tertiary: mat.$blue-palette,
-    ),
-    typography: Roboto,
-    density: 0,
-  ));
-}/* You can add global styles to this file, and also import other style files */
-
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+  @include mat.theme(
+    (
+      color: (
+        theme-type: light,
+        // Aunque el fondo es oscuro, el tema base puede ser light
+        primary: mat.$azure-palette,
+        // Tu paleta Azure
+        tertiary: mat.$blue-palette,
+        // Tu paleta Blue
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
+}
