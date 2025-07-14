@@ -1,18 +1,16 @@
+// src/app/main-board/main-board.component.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { TableComponent } from '../../components/table/table.component'; // La ruta puede ser 'src/app/table/table.component' o '../../components/table/table.component'
+import { TableComponent } from '../../components/table/table.component'; // Asegura la ruta correcta
 import { FormsModule } from '@angular/forms';
-
-// Importaciones de Angular Material para el diálogo
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 // Importación de servicios
 import { TeamService } from '../../services/team.service';
-import { PlayerService } from '../../services/player.service';
+import { PlayerService } from '../../services/player.service'; // Necesitamos PlayerService aquí
 import { PartidoService } from '../../services/partido.service';
 import { CleanSheetService } from '../../services/clean-sheet.service';
-// ELIMINADO: import { WebsocketService } from '../services/websocket.service';
 
 // Importa el componente del modal
 import { MatchRegisterModalComponent } from '../../shared/modals/match-register-modal/match-register-modal.component';
@@ -39,9 +37,7 @@ interface TableColumn {
   styleUrls: ['./main-board.component.scss'],
 })
 export class MainBoardComponent implements OnInit, OnDestroy {
-  // Mantenemos OnDestroy por buena práctica, aunque no hay suscripciones activas aquí ahora.
-
-  // --- Propiedades para la Tabla de Equipos (Posiciones) ---
+  // ... (Propiedades de tablas y filtros - sin cambios aquí) ...
   originalTeamsStandingsData: any[] = [];
   teamsStandingsData: any[] = [];
   teamsStandingsColumns: TableColumn[] = [
@@ -58,7 +54,6 @@ export class MainBoardComponent implements OnInit, OnDestroy {
   ];
   teamNameFilter: string = '';
 
-  // --- Propiedades para la Tabla de Goleadores ---
   originalTopScorersData: any[] = [];
   topScorersData: any[] = [];
   topScorersColumns: TableColumn[] = [
@@ -72,7 +67,6 @@ export class MainBoardComponent implements OnInit, OnDestroy {
   minAgeFilter: number | null = null;
   maxAgeFilter: number | null = null;
 
-  // --- Propiedades para la Tabla de Valla Menos Vencida ---
   originalCleanSheetsData: any[] = [];
   cleanSheetsData: any[] = [];
   cleanSheetsColumns: TableColumn[] = [
@@ -83,58 +77,70 @@ export class MainBoardComponent implements OnInit, OnDestroy {
   minCleanSheetsFilter: number | null = null;
   goalkeeperTeamFilter: string = '';
 
-  // --- Propiedades para el Registro de Partido ---
-  allTeams: any[] = [];
+  allTeams: any[] = []; // Esta lista contendrá los equipos CON sus jugadores
 
   constructor(
     private http: HttpClient, // Lo mantenemos por si hay subidas de archivos directas (Admin Panel)
     private teamService: TeamService,
-    private playerService: PlayerService,
+    private playerService: PlayerService, // Inyecta PlayerService
     private partidoService: PartidoService,
     private cleanSheetService: CleanSheetService,
-    private dialog: MatDialog // ELIMINADO: private websocketService: WebsocketService
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
     this.fetchTeamsStandings();
     this.fetchTopScorers();
     this.fetchCleanSheets();
-    this.fetchAllTeams();
-    // ELIMINADO: this.subscribeToRealtimeUpdates();
+    this.fetchAllTeamsWithPlayers(); // Llama a este método para cargar equipos con jugadores
   }
 
-  ngOnDestroy(): void {
-    // ELIMINADO: No hay suscripciones de WebSocket que desuscribir aquí.
-    // Si tuvieras otras suscripciones (ej. de RxJS temporizadores), las desuscribirías aquí.
+  ngOnDestroy(): void {}
+
+  /**
+   * Obtiene todos los equipos con sus jugadores para llenar los selectores del formulario de partido.
+   * Usará el endpoint /api/teams?withPlayers=true
+   */
+  fetchAllTeamsWithPlayers(): void {
+    this.http
+      .get<any[]>('http://localhost:8000/api/teams?withPlayers=true')
+      .subscribe(
+        // Añade ?withPlayers=true
+        (data) => {
+          this.allTeams = data; // allTeams ahora tendrá los equipos con su array 'players'
+          console.log('Equipos cargados con jugadores:', this.allTeams);
+        },
+        (error) => {
+          console.error('Error al cargar equipos con jugadores:', error);
+          // Fallback: Si el backend no soporta ?withPlayers=true o da error,
+          // simplemente carga los equipos sin jugadores. El modal mostrará "No hay jugadores disponibles".
+          this.teamService.getTeams().subscribe((data) => {
+            this.allTeams = data;
+            console.warn(
+              'Equipos cargados sin jugadores. El modal no mostrará la lista de jugadores por equipo.'
+            );
+          });
+        }
+      );
   }
 
-  // ELIMINADO: private subscribeToRealtimeUpdates(): void { /* ... */ }
-
-  fetchAllTeams(): void {
-    this.teamService.getTeams().subscribe(
-      (data) => {
-        this.allTeams = data;
-      },
-      (error) => {
-        console.error('Error al cargar todos los equipos:', error);
-      }
-    );
-  }
+  // ... (resto de los métodos, incluyendo openMatchRegisterModal que usa this.allTeams) ...
 
   openMatchRegisterModal(): void {
     const dialogRef = this.dialog.open(MatchRegisterModalComponent, {
-      width: '700px',
-      data: { teams: this.allTeams },
+      width: '750px', // Ancho del modal, ajusta según necesidad
+      data: { teams: this.allTeams }, // ¡Pasamos la lista de equipos CON jugadores!
     });
 
     dialogRef.afterClosed().subscribe((result) => {
+      // 'result' contendrá los datos del partido Y las estadísticas de los jugadores
       if (result) {
-        console.log('Partido registrado desde modal:', result);
+        console.log('Datos de partido y jugadores para registrar:', result);
         this.partidoService.createPartido(result).subscribe(
+          // Envía el partido y los players_stats
           (res) => {
             alert('Partido registrado exitosamente!');
-            // ¡MANTENEMOS ESTAS LLAMADAS PARA RECARGAR LAS TABLAS!
-            // Esto reemplaza la función de WebSockets de notificar el cambio.
+            // Recargar todas las tablas para que reflejen los nuevos resultados
             this.fetchTeamsStandings();
             this.fetchTopScorers();
             this.fetchCleanSheets();
@@ -153,9 +159,8 @@ export class MainBoardComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * Obtiene los datos de la tabla de posiciones de equipos desde el backend.
-   */
+  // ... (resto de los métodos fetch, onTeamFileUpload, applyFilter, calculateStats - sin cambios) ...
+
   fetchTeamsStandings(): void {
     this.teamService.getStandings().subscribe(
       (data) => {
@@ -171,9 +176,6 @@ export class MainBoardComponent implements OnInit, OnDestroy {
     );
   }
 
-  /**
-   * Obtiene los datos de los máximos goleadores desde el backend.
-   */
   fetchTopScorers(): void {
     this.playerService.getTopScorers().subscribe(
       (data) => {
@@ -186,9 +188,6 @@ export class MainBoardComponent implements OnInit, OnDestroy {
     );
   }
 
-  /**
-   * Obtiene los datos de la valla menos vencida desde el backend.
-   */
   fetchCleanSheets(): void {
     this.cleanSheetService.getCleanSheets().subscribe(
       (data) => {
@@ -201,24 +200,18 @@ export class MainBoardComponent implements OnInit, OnDestroy {
     );
   }
 
-  /**
-   * Maneja la subida de un archivo (XLS/CSV) para la tabla de Equipos.
-   * Este método aún se usará en el AdminPanelComponent.
-   * @param file El archivo File seleccionado por el usuario.
-   */
   onTeamFileUpload(file: File): void {
     console.log('Archivo de equipos seleccionado para subir:', file.name);
     const formData = new FormData();
     formData.append('file', file);
 
-    // Usa http directamente aquí, o podrías crear un FileUploadService
     this.http
       .post('http://localhost:8000/api/teams/upload', formData)
       .subscribe(
         (response) => {
           console.log('Subida de equipos exitosa:', response);
           alert('Equipos importados correctamente!');
-          this.fetchTeamsStandings(); // Recarga la tabla de posiciones
+          this.fetchTeamsStandings();
         },
         (error) => {
           console.error('Error al subir equipos:', error);
@@ -229,11 +222,6 @@ export class MainBoardComponent implements OnInit, OnDestroy {
       );
   }
 
-  // --- Métodos de Filtrado para cada Tabla (sin cambios) ---
-
-  /**
-   * Aplica filtros a la tabla de posiciones de Equipos.
-   */
   applyTeamFilter(): void {
     let filteredData = [...this.originalTeamsStandingsData];
     if (this.teamNameFilter) {
@@ -244,9 +232,6 @@ export class MainBoardComponent implements OnInit, OnDestroy {
     this.teamsStandingsData = filteredData;
   }
 
-  /**
-   * Aplica filtros a la tabla de Goleadores (goles, equipo, edad).
-   */
   applyTopScorersFilter(): void {
     let filteredData = [...this.originalTopScorersData];
     if (this.minGoalsFilter !== null) {
@@ -274,9 +259,6 @@ export class MainBoardComponent implements OnInit, OnDestroy {
     this.topScorersData = filteredData;
   }
 
-  /**
-   * Aplica filtros a la tabla de Vallas Menos Vencidas (vallas invictas, equipo).
-   */
   applyCleanSheetsFilter(): void {
     let filteredData = [...this.originalCleanSheetsData];
     if (this.minCleanSheetsFilter !== null) {
@@ -295,11 +277,6 @@ export class MainBoardComponent implements OnInit, OnDestroy {
     this.cleanSheetsData = filteredData;
   }
 
-  // --- Métodos para Estadísticas Generales de Equipos (sin cambios) ---
-
-  /**
-   * Calcula el promedio de puntos de los equipos.
-   */
   calculateAveragePoints(): number {
     if (this.teamsStandingsData.length === 0) {
       return 0;
@@ -311,9 +288,6 @@ export class MainBoardComponent implements OnInit, OnDestroy {
     return totalPoints / this.teamsStandingsData.length;
   }
 
-  /**
-   * Obtiene la mejor diferencia de goles (GD) entre los equipos.
-   */
   getBestGD(): number {
     if (this.teamsStandingsData.length === 0) {
       return 0;

@@ -10,6 +10,7 @@
             [(ngModel)]="matchData.home_team_id"
             name="home_team_id"
             required
+            (selectionChange)="onTeamSelectionChange()"
           >
             <mat-option [value]="null" disabled
               >Selecciona un equipo</mat-option
@@ -43,6 +44,7 @@
             [(ngModel)]="matchData.away_team_id"
             name="away_team_id"
             required
+            (selectionChange)="onTeamSelectionChange()"
           >
             <mat-option [value]="null" disabled
               >Selecciona un equipo</mat-option
@@ -92,6 +94,91 @@
             required
           />
         </mat-form-field>
+      </div>
+    </div>
+
+    <div *ngIf="modalErrorMessage" class="alert alert-danger mt-3" role="alert">
+      {{ modalErrorMessage }}
+    </div>
+
+    <mat-divider class="mb-3 mt-3"></mat-divider>
+    <h3>Goles y Participación de Jugadores</h3>
+
+    <div class="row mt-3" *ngIf="matchData.home_team_id">
+      <div class="col-12">
+        <h5>Jugadores del Equipo Local:</h5>
+        <div *ngIf="homePlayers.length === 0" class="text-muted">
+          No hay jugadores disponibles para este equipo. Asegúrate de que los
+          equipos tengan jugadores asignados en la base de datos.
+        </div>
+        <div
+          *ngFor="let player of homePlayers"
+          class="mb-2 d-flex align-items-center"
+        >
+          <div class="col-6">
+            {{ player.name }}
+            <span class="text-muted">({{ player.position }})</span>
+          </div>
+          <div class="col-3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Goles</mat-label>
+              <input
+                matInput
+                type="number"
+                [(ngModel)]="playerStats[player.id].goals"
+                name="home_player_goals_{{ player.id }}"
+                min="0"
+              />
+            </mat-form-field>
+          </div>
+          <div class="col-3 text-end">
+            <mat-checkbox
+              [(ngModel)]="playerStats[player.id].played_full_match"
+              name="home_player_played_{{ player.id }}"
+            >
+              Jugó completo
+            </mat-checkbox>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-3" *ngIf="matchData.away_team_id">
+      <div class="col-12">
+        <h5>Jugadores del Equipo Visitante:</h5>
+        <div *ngIf="awayPlayers.length === 0" class="text-muted">
+          No hay jugadores disponibles para este equipo. Asegúrate de que los
+          equipos tengan jugadores asignados en la base de datos.
+        </div>
+        <div
+          *ngFor="let player of awayPlayers"
+          class="mb-2 d-flex align-items-center"
+        >
+          <div class="col-6">
+            {{ player.name }}
+            <span class="text-muted">({{ player.position }})</span>
+          </div>
+          <div class="col-3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Goles</mat-label>
+              <input
+                matInput
+                type="number"
+                [(ngModel)]="playerStats[player.id].goals"
+                name="away_player_goals_{{ player.id }}"
+                min="0"
+              />
+            </mat-form-field>
+          </div>
+          <div class="col-3 text-end">
+            <mat-checkbox
+              [(ngModel)]="playerStats[player.id].played_full_match"
+              name="away_player_played_{{ player.id }}"
+            >
+              Jugó completo
+            </mat-checkbox>
+          </div>
+        </div>
       </div>
     </div>
   </form>
