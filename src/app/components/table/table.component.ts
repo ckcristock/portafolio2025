@@ -7,54 +7,60 @@ import {
   OnInit,
   ViewChild,
   ElementRef,
-} from '@angular/core';
+  TemplateRef,
+} from '@angular/core'; // Import TemplateRef
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon'; // Import MatIconModule for mat-icon-button (if using)
 
 @Component({
   selector: 'app-table',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatButtonModule, RouterModule],
+  imports: [
+    CommonModule,
+    MatTableModule,
+    MatButtonModule,
+    RouterModule,
+    MatIconModule, // Add MatIconModule here if using <mat-icon> or mat-icon-button
+  ],
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
 })
 export class TableComponent implements OnInit {
-  // --- Entradas (Inputs) ---
   @Input() tableTitle: string = '';
   @Input() data: any[] = [];
+  // UPDATED: Added 'actions' type possibility for columns
   @Input() columns: {
     key: string;
     header: string;
-    type?: 'text' | 'number' | 'date' | 'link';
+    type?: 'text' | 'number' | 'date' | 'link' | 'actions';
     linkRoute?: string;
+    actions?: {
+      icon: string;
+      tooltip: string;
+      color?: string;
+      event: string;
+    }[];
   }[] = [];
   @Input() showUploadButton: boolean = false;
   @Input() uploadButtonText: string = 'Subir Archivo';
+  @Input() showFilterSection: boolean = false;
+  @Input() filterSectionTitle: string = 'Filtros y Estadísticas';
 
-  // NUEVAS ENTRADAS para filtros/estadísticas
-  @Input() showFilterSection: boolean = false; // Controla la visibilidad de la sección de filtros
-  @Input() filterSectionTitle: string = 'Filtros y Estadísticas'; // Título para la sección de filtros
-
-  // --- Salidas (Outputs) ---
   @Output() fileUpload = new EventEmitter<File>();
-  // Puedes añadir un Output para emitir los cambios de filtro si la lógica de filtro está dentro de esta tabla
-  // @Output() filterChanged = new EventEmitter<any>();
+  // NEW: Output for action button clicks
+  @Output() actionClick = new EventEmitter<{ action: string; element: any }>();
 
-  // Referencia al input de tipo 'file' en el template
   @ViewChild('fileInput') fileInput!: ElementRef;
 
-  // NUEVA PROPIEDAD para controlar el estado de colapso
-  isFilterSectionCollapsed: boolean = true; // Empieza colapsada por defecto
+  isFilterSectionCollapsed: boolean = true;
 
   ngOnInit(): void {}
 
-  /**
-   * Alterna el estado de colapso de la sección de filtros.
-   */
-  toggleFilterSection(): void {
-    this.isFilterSectionCollapsed = !this.isFilterSectionCollapsed;
+  get columnKeys(): string[] {
+    return this.columns.map((col) => col.key);
   }
 
   onFileSelected(event: Event): void {
@@ -70,10 +76,6 @@ export class TableComponent implements OnInit {
     this.fileInput.nativeElement.click();
   }
 
-  get columnKeys(): string[] {
-    return this.columns.map((col) => col.key);
-  }
-
   getCellValue(item: any, col: any): any {
     const value = item[col.key];
     if (col.type === 'date' && value) {
@@ -84,5 +86,14 @@ export class TableComponent implements OnInit {
 
   getLinkRoute(item: any, col: any): string[] {
     return [col.linkRoute, item.id.toString()];
+  }
+
+  toggleFilterSection(): void {
+    this.isFilterSectionCollapsed = !this.isFilterSectionCollapsed;
+  }
+
+  // NEW: Method to handle action button clicks and emit them
+  onActionClick(action: string, element: any): void {
+    this.actionClick.emit({ action, element });
   }
 }

@@ -1,0 +1,26 @@
+<h2 mat-dialog-title>{{ modalTitle }}</h2>
+
+<mat-dialog-content>
+  <form (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+      <mat-label>Nombre del Equipo</mat-label>
+      <input matInput [(ngModel)]="team.name" name="name" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+      <mat-label>Ciudad</mat-label>
+      <input matInput [(ngModel)]="team.city" name="city" />
+    </mat-form-field>
+
+    <div *ngIf="modalErrorMessage" class="alert alert-danger mt-3" role="alert">
+      {{ modalErrorMessage }}
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()">
+    {{ isEditMode ? "Guardar Cambios" : "Crear Equipo" }}
+  </button>
+</mat-dialog-actions>
