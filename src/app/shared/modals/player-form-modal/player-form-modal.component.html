@@ -1,0 +1,46 @@
+<h2 mat-dialog-title>{{ modalTitle }}</h2>
+
+<mat-dialog-content>
+  <form (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+      <mat-label>Nombre del Jugador</mat-label>
+      <input matInput [(ngModel)]="player.name" name="name" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+      <mat-label>Posición</mat-label>
+      <input matInput [(ngModel)]="player.position" name="position" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+      <mat-label>Equipo</mat-label>
+      <mat-select [(ngModel)]="player.team_id" name="team_id" required>
+        <mat-option [value]="null" disabled>Selecciona un equipo</mat-option>
+        <mat-option *ngFor="let team of allTeams" [value]="team.id">{{
+          team.name
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+      <mat-label>Fecha de Nacimiento</mat-label>
+      <input
+        matInput
+        type="date"
+        [(ngModel)]="player.birth_date"
+        name="birth_date"
+      />
+    </mat-form-field>
+
+    <div *ngIf="modalErrorMessage" class="alert alert-danger mt-3" role="alert">
+      {{ modalErrorMessage }}
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()">
+    {{ isEditMode ? "Guardar Cambios" : "Crear Jugador" }}
+  </button>
+</mat-dialog-actions>

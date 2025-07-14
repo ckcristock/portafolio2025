@@ -104,4 +104,30 @@
       </div>
     </div>
   </div>
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="card shadow-sm">
+        <div
+          class="card-header bg-secondary text-white d-flex justify-content-between align-items-center"
+        >
+          <h5 class="mb-0">Gestión de Jugadores</h5>
+          <button
+            class="btn btn-warning btn-sm"
+            (click)="openPlayerFormModal()"
+          >
+            <i class="fas fa-user-plus"></i> Añadir Jugador
+          </button>
+        </div>
+        <div class="card-body">
+          <app-table
+            [tableTitle]="''"
+            [data]="playersData"
+            [columns]="playerColumns"
+            (actionClick)="onPlayerTableAction($event)"
+          >
+          </app-table>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

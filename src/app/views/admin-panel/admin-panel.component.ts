@@ -1,4 +1,3 @@
-// src/app/admin-panel/admin-panel.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
@@ -6,17 +5,21 @@ import { FormsModule } from '@angular/forms';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 import { FileUploadService } from '../../services/file-upload.service';
-import { TeamService } from '../../services/team.service';
-import { TeamFormModalComponent } from '../../shared/modals/team-form-modal/team-form-modal.component';
-import { TableComponent } from '../../components/table/table.component'; // Import app-table
+import { TeamService } from '../../services/team.service'; // Servicio para CRUD de equipos
+import { PlayerService } from '../../services/player.service'; // ¡Importar PlayerService!
 
-// Interfaz para la definición de columnas de la tabla (actualizada para 'actions')
+// Modales de formulario
+import { TeamFormModalComponent } from '../../shared/modals/team-form-modal/team-form-modal.component';
+import { PlayerFormModalComponent } from '../../shared/modals/player-form-modal/player-form-modal.component'; // ¡Importar PlayerFormModalComponent!
+
+import { TableComponent } from '../../components/table/table.component'; // Importar app-table
+
+// Interfaz para la definición de columnas de la tabla
 interface TableColumn {
   key: string;
   header: string;
-  type?: 'text' | 'number' | 'date' | 'link' | 'actions'; // Add 'actions' type
+  type?: 'text' | 'number' | 'date' | 'link' | 'actions';
   linkRoute?: string;
-  // Define actions properties if type is 'actions'
   actions?: { icon: string; tooltip: string; color?: string; event: string }[];
 }
 
@@ -25,10 +28,10 @@ interface TableColumn {
   standalone: true,
   imports: [
     CommonModule,
-    HttpClientModule, // Para inyectar HttpClient
-    FormsModule, // Para el manejo de formularios
-    MatDialogModule, // Para usar MatDialog
-    TableComponent, // Para usar el componente de tabla
+    HttpClientModule,
+    FormsModule,
+    MatDialogModule,
+    TableComponent,
   ],
   templateUrl: './admin-panel.component.html',
   styleUrls: ['./admin-panel.component.scss'], // O .scss si usas Sass
@@ -45,13 +48,11 @@ export class AdminPanelComponent implements OnInit {
   playersUploadError: boolean = false;
 
   // --- PROPIEDADES PARA GESTIÓN DE EQUIPOS (CRUD) ---
-  teamsData: any[] = []; // Array que contendrá los datos de los equipos para la tabla
+  teamsData: any[] = [];
   teamColumns: TableColumn[] = [
-    // Definición de las columnas para la tabla de gestión de equipos
     { key: 'id', header: 'ID', type: 'number' },
     { key: 'name', header: 'Nombre', type: 'text' },
     { key: 'city', header: 'Ciudad', type: 'text' },
-    // Columna para acciones: define los botones que se renderizarán en 'app-table'
     {
       key: 'actions',
       header: 'Acciones',
@@ -74,26 +75,59 @@ export class AdminPanelComponent implements OnInit {
   ];
   // --------------------------------------------------
 
+  // --- NUEVAS PROPIEDADES PARA GESTIÓN DE JUGADORES (CRUD) ---
+  playersData: any[] = []; // Array que contendrá los datos de los jugadores para la tabla
+  playerColumns: TableColumn[] = [
+    // Definición de las columnas para la tabla de gestión de jugadores
+    { key: 'id', header: 'ID', type: 'number' },
+    { key: 'name', header: 'Nombre', type: 'text' },
+    { key: 'position', header: 'Posición', type: 'text' },
+    { key: 'team_name', header: 'Equipo', type: 'text' }, // Asumo que el backend enviará team_name
+    { key: 'birth_date', header: 'Fecha Nac.', type: 'date' },
+    // Columna para acciones:
+    {
+      key: 'actions',
+      header: 'Acciones',
+      type: 'actions',
+      actions: [
+        {
+          icon: 'fas fa-edit',
+          tooltip: 'Editar Jugador',
+          color: 'primary',
+          event: 'edit',
+        },
+        {
+          icon: 'fas fa-trash',
+          tooltip: 'Eliminar Jugador',
+          color: 'warn',
+          event: 'delete',
+        },
+      ],
+    },
+  ];
+  allTeams: any[] = []; // Necesaria para el selector de equipo en el PlayerFormModal
+  // --------------------------------------------------
+
   constructor(
-    private http: HttpClient, // Lo mantenemos por si hay subidas de archivos directas
-    private fileUploadService: FileUploadService, // Servicio para subir archivos
-    private teamService: TeamService, // Servicio para CRUD de equipos
-    private dialog: MatDialog // Servicio para abrir modales de Angular Material
+    private http: HttpClient,
+    private fileUploadService: FileUploadService,
+    private teamService: TeamService,
+    private playerService: PlayerService, // ¡Inyectar PlayerService!
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
-    this.fetchTeams(); // Cargar la lista de equipos al inicializar el componente
+    this.fetchTeams(); // Cargar la lista de equipos para el CRUD de Equipos
+    this.fetchPlayers(); // ¡NUEVO! Cargar la lista de jugadores para el CRUD de Jugadores
+    this.fetchAllTeamsForSelects(); // Cargar todos los equipos para los selects de modales
   }
 
   // --- MÉTODOS PARA GESTIÓN DE EQUIPOS (CRUD) ---
 
-  /**
-   * Obtiene la lista de equipos desde el backend para la tabla de gestión.
-   */
   fetchTeams(): void {
     this.teamService.getTeams().subscribe(
       (data) => {
-        this.teamsData = data; // Asigna los equipos obtenidos a la propiedad 'teamsData'
+        this.teamsData = data;
       },
       (error) => {
         console.error(
@@ -104,18 +138,13 @@ export class AdminPanelComponent implements OnInit {
     );
   }
 
-  /**
-   * Maneja las acciones de los botones dentro de la tabla de equipos.
-   * Se activa por el Output `(actionClick)` del componente `app-table`.
-   * @param event Objeto que contiene la acción ('edit' o 'delete') y el elemento (equipo) afectado.
-   */
   onTeamTableAction(event: { action: string; element: any }): void {
     switch (event.action) {
       case 'edit':
-        this.openTeamFormModal(event.element); // Abre modal en modo edición
+        this.openTeamFormModal(event.element);
         break;
       case 'delete':
-        this.deleteTeam(event.element.id); // Llama al método de eliminación
+        this.deleteTeam(event.element.id);
         break;
       default:
         console.warn(
@@ -125,25 +154,19 @@ export class AdminPanelComponent implements OnInit {
     }
   }
 
-  /**
-   * Abre el modal para crear o editar un equipo.
-   * @param team Objeto de equipo a editar (opcional). Si no se proporciona, es modo creación.
-   */
   openTeamFormModal(team?: any): void {
     const dialogRef = this.dialog.open(TeamFormModalComponent, {
-      width: '400px', // Ancho del modal de formulario
-      data: { team: team }, // Pasa el objeto 'team' si estamos editando, de lo contrario es nulo
+      width: '400px',
+      data: { team: team },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      // 'result' contendrá el objeto del equipo si el usuario hizo clic en 'Crear'/'Guardar Cambios'
       if (result) {
         if (result.id) {
-          // Si el objeto tiene un ID, es una actualización (PUT)
           this.teamService.updateTeam(result.id, result).subscribe(
             (res) => {
               alert('Equipo actualizado correctamente.');
-              this.fetchTeams(); // Recargar la lista de equipos después de la actualización
+              this.fetchTeams();
             },
             (err) => {
               console.error('Error al actualizar equipo:', err);
@@ -154,11 +177,10 @@ export class AdminPanelComponent implements OnInit {
             }
           );
         } else {
-          // Si el objeto NO tiene un ID, es una creación (POST)
           this.teamService.createTeam(result).subscribe(
             (res) => {
               alert('Equipo creado correctamente.');
-              this.fetchTeams(); // Recargar la lista de equipos después de la creación
+              this.fetchTeams();
             },
             (err) => {
               console.error('Error al crear equipo:', err);
@@ -173,12 +195,7 @@ export class AdminPanelComponent implements OnInit {
     });
   }
 
-  /**
-   * Elimina un equipo de la base de datos.
-   * @param teamId El ID del equipo a eliminar.
-   */
   deleteTeam(teamId: number): void {
-    // Se podría integrar un ConfirmDialogComponent aquí para una mejor UX
     if (
       confirm(
         '¿Estás seguro de que quieres eliminar este equipo? Esta acción es irreversible.'
@@ -187,7 +204,7 @@ export class AdminPanelComponent implements OnInit {
       this.teamService.deleteTeam(teamId).subscribe(
         () => {
           alert('Equipo eliminado correctamente.');
-          this.fetchTeams(); // Recargar la lista de equipos después de la eliminación
+          this.fetchTeams();
         },
         (error) => {
           console.error('Error al eliminar equipo:', error);
@@ -200,9 +217,140 @@ export class AdminPanelComponent implements OnInit {
     }
   }
 
-  // --- MÉTODOS PARA SUBIDA DE ARCHIVOS (EXISTENTES) ---
-  // Estos métodos se mantienen tal cual, ya que gestionan la subida masiva.
+  // --- NUEVOS MÉTODOS PARA GESTIÓN DE JUGADORES (CRUD) ---
 
+  /**
+   * Obtiene la lista de jugadores desde el backend para la tabla de gestión.
+   * Carga la relación 'team' para mostrar el nombre del equipo.
+   */
+  fetchPlayers(): void {
+    this.playerService.getPlayers().subscribe(
+      // Asumo que getPlayers ya trae la relación 'team'
+      (data) => {
+        // Mapear para añadir team_name directamente al jugador para la tabla
+        this.playersData = data.map((player) => ({
+          ...player,
+          team_name: player.team ? player.team.name : 'N/A', // Añade el nombre del equipo
+        }));
+      },
+      (error) => {
+        console.error(
+          'Error al cargar jugadores para el panel de administración:',
+          error
+        );
+      }
+    );
+  }
+
+  /**
+   * Obtiene todos los equipos para usar en los selectores de los formularios de jugadores/partidos.
+   */
+  fetchAllTeamsForSelects(): void {
+    this.teamService.getTeams().subscribe(
+      (data) => {
+        this.allTeams = data;
+      },
+      (error) => {
+        console.error('Error al cargar equipos para selectores:', error);
+      }
+    );
+  }
+
+  /**
+   * Maneja las acciones de los botones dentro de la tabla de jugadores.
+   * Se activa por el Output `(actionClick)` del componente `app-table`.
+   * @param event Objeto que contiene la acción ('edit' o 'delete') y el elemento (jugador) afectado.
+   */
+  onPlayerTableAction(event: { action: string; element: any }): void {
+    switch (event.action) {
+      case 'edit':
+        this.openPlayerFormModal(event.element); // Abre modal en modo edición
+        break;
+      case 'delete':
+        this.deletePlayer(event.element.id); // Llama al método de eliminación
+        break;
+      default:
+        console.warn(
+          'Acción desconocida en la tabla de jugadores:',
+          event.action
+        );
+    }
+  }
+
+  /**
+   * Abre el modal para crear o editar un jugador.
+   * @param player Objeto de jugador a editar (opcional). Si no se proporciona, es modo creación.
+   */
+  openPlayerFormModal(player?: any): void {
+    const dialogRef = this.dialog.open(PlayerFormModalComponent, {
+      width: '450px', // Ancho del modal de formulario de jugador
+      data: { player: player, teams: this.allTeams }, // Pasa el jugador y la lista de equipos
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        if (result.id) {
+          // Si el resultado tiene un ID, es una actualización
+          this.playerService.updatePlayer(result.id, result).subscribe(
+            (res) => {
+              alert('Jugador actualizado correctamente.');
+              this.fetchPlayers();
+            },
+            (err) => {
+              console.error('Error al actualizar jugador:', err);
+              alert(
+                'Error al actualizar jugador: ' +
+                  (err.error?.message || 'Desconocido')
+              );
+            }
+          );
+        } else {
+          // Si no tiene ID, es una creación
+          this.playerService.createPlayer(result).subscribe(
+            (res) => {
+              alert('Jugador creado correctamente.');
+              this.fetchPlayers();
+            },
+            (err) => {
+              console.error('Error al crear jugador:', err);
+              alert(
+                'Error al crear jugador: ' +
+                  (err.error?.message || 'Desconocido')
+              );
+            }
+          );
+        }
+      }
+    });
+  }
+
+  /**
+   * Elimina un jugador de la base de datos.
+   * @param playerId El ID del jugador a eliminar.
+   */
+  deletePlayer(playerId: number): void {
+    if (
+      confirm(
+        '¿Estás seguro de que quieres eliminar este jugador? Esta acción es irreversible.'
+      )
+    ) {
+      this.playerService.deletePlayer(playerId).subscribe(
+        () => {
+          alert('Jugador eliminado correctamente.');
+          this.fetchPlayers();
+        },
+        (error) => {
+          console.error('Error al eliminar jugador:', error);
+          alert(
+            'Error al eliminar jugador: ' +
+              (error.error?.message || 'Desconocido')
+          );
+        }
+      );
+    }
+  }
+
+  // --- MÉTODOS PARA SUBIDA DE ARCHIVOS (EXISTENTES) ---
   onTeamsFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
@@ -268,7 +416,7 @@ export class AdminPanelComponent implements OnInit {
             response.message || 'Jugadores subidos correctamente.';
           this.playersUploadError = false;
           this.selectedPlayersFile = null;
-          // Si tienes una tabla de jugadores aquí, la recargarías: this.fetchPlayers(); (futuro CRUD de Jugadores)
+          this.fetchPlayers(); // ¡Recargar la tabla de jugadores después de la subida masiva!
         },
         (error) => {
           console.error('Error al subir jugadores:', error);
