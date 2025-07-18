@@ -1,5 +1,7 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
   <input type="text" formControlName="name" />
-  <button type="submit">Submit</button>
 </form>
-<router-outlet></router-outlet>
+<select formControlName="options" *ngIf="buscando">
+  <option *ngFor="let option of options" [value]="option">{{ option }}</option>
+</select>
+<!-- <router-outlet></router-outlet> -->

@@ -14,10 +14,31 @@ export class AppComponent {
   title = 'angular';
   observable = new Subject<string>();
   form;
+  options = [
+    'One',
+    'Two',
+    'Three',
+    'Four',
+    'Five',
+    'Six',
+    'Seven',
+    'Eight',
+    'Nine',
+    'Ten',
+  ];
 
+  buscando = false;
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
       name: [''],
+    });
+  }
+
+  subscribeToObservable() {
+    this.observable.subscribe((value) => {
+      return new Promise<void>((resolve, reject) => {
+        this.options.find((option) => option === value) ? resolve() : reject();
+      });
     });
   }
 
